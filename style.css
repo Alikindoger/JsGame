@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Evita el scroll */
+    background-color: #222; /* Fondo oscuro */
+}
+
+canvas {
+    image-rendering: -moz-critp-edge; /* Firefox */
+    image-rendering: pixelated;       /* Chrome, Edge, Safari */
+    image-rendering: crisp-edges;
+}
+
+body{
+     image-rendering: -moz-critp-edge;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
