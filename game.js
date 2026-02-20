@@ -1,3 +1,4 @@
+import { Mapa } from './mapa.js';
 import { Jugador } from './jugador.js';
 
 const canvas = document.getElementById('juegoCanvas');
@@ -20,7 +21,10 @@ const TICK_TIME = 1000 / TICKS_POR_SEGUNDO;
 let acumulador = 0;
 let ultimoTiempo = 0;
 
-const jugador = new Jugador(canvas.width / 2, canvas.height / 2);
+
+const TILE_SIZE = 64;
+const mapa = new Mapa(TILE_SIZE,16,true);
+const jugador = new Jugador(192+64, 128,mapa,true);
 const teclas = {};
 
 // --- INPUTS ---
@@ -50,8 +54,9 @@ function buclePrincipal(tiempoActual) {
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    jugador.dibujar(ctx);
 
+    mapa.dibujar(ctx);
+    jugador.dibujar(ctx);
     requestAnimationFrame(buclePrincipal);
 }
 configurarPixelArt();

@@ -2,10 +2,13 @@ import { Entidad } from './entidad.js';
 import { Animador } from './animador.js';
 
 export class Jugador extends Entidad {
-    constructor(x, y) {
+    constructor(x, y,mapa,debug = false) {
         super(x, y, 64, 64, null);
-        
-        // Cargamos la hoja de sprites (ejemplo: cada frame es de 32x32)
+
+        this.hitBoxX = 64;
+        this.hitBoxY = 64;
+
+        this.mapa = mapa;
         this.IdleAnimator = new Animador('./assets/idle_player.png',16,16);
         this.WalkAnimator = new Animador('./assets/walk_player.png',16,16);
 
@@ -23,6 +26,7 @@ export class Jugador extends Entidad {
             'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12}
 
         };
+        this.debug = debug;
 
         this.estadoActual = 'IDLE_ABAJO';
         this.velocidad = 4;
@@ -34,11 +38,26 @@ export class Jugador extends Entidad {
         let moviendose = false;
         let nuevoEstado = 'ABAJO';
 
-        if (teclas['w']) { this.y -= this.velocidad; nuevoEstado = 'ARRIBA'; moviendose = true; }
-        else if (teclas['s']) { this.y += this.velocidad; nuevoEstado = 'ABAJO'; moviendose = true; }
-        if (teclas['a']) { this.x -= this.velocidad; nuevoEstado = 'IZQUIERDA'; moviendose = true; }
-        else if (teclas['d']) { this.x += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
+        let movY = 0;
+        let movX = 0;
 
+        if (teclas['w']) { movY -= this.velocidad; nuevoEstado = 'ARRIBA'; moviendose = true; }
+        else if (teclas['s']) { movY += this.velocidad; nuevoEstado = 'ABAJO'; moviendose = true; }
+        if (teclas['a']) { movX -= this.velocidad; nuevoEstado = 'IZQUIERDA'; moviendose = true; }
+        else if (teclas['d']) { movX += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
+        
+        
+        if (!this.mapa.esSolido(this.x + movX, this.y, this.ancho, this.alto)) {
+            
+            this.x += movX;
+        }
+
+        if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY)) {
+            this.y += movY;
+        }
+
+        
+        
         if (moviendose) {
             this.estadoActual = 'WALK_'+nuevoEstado;
             this.ultimaDireccion = nuevoEstado;
@@ -65,6 +84,14 @@ export class Jugador extends Entidad {
 
     dibujar(ctx) {
         const anim = this.animaciones[this.estadoActual];
-        this.sprite.dibujar(ctx, this.x, this.y, this.ancho, this.alto, anim.fila,2,4,true);
+        this.sprite.dibujar(ctx, this.x - 6, this.y, this.ancho, this.alto, anim.fila,2,4,true);
+       
+        if(this.debug){
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(this.x, this.y, this.ancho, this.alto);
+        ctx.fillStyle = "white";
+        ctx.fillRect(this.x, this.y, 4, 4);
+        }
+
     }
 }

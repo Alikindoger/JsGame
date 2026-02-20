@@ -34,8 +34,6 @@ export class Animador {
         if(fila != 0){
             offsetY = offsetY * fila +4;
         }
-
-        console.log(fila * this.frameH);
         
         ctx.drawImage(
             this.imagen,
