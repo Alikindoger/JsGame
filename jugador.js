@@ -31,6 +31,9 @@ export class Jugador extends Entidad {
         this.estadoActual = 'IDLE_ABAJO';
         this.velocidad = 4;
         this.ultimaDireccion = 'ABAJO';
+
+        this.auxX = 0;
+        this.auxY = 0;
     }
 
 
@@ -45,19 +48,21 @@ export class Jugador extends Entidad {
         else if (teclas['s']) { movY += this.velocidad; nuevoEstado = 'ABAJO'; moviendose = true; }
         if (teclas['a']) { movX -= this.velocidad; nuevoEstado = 'IZQUIERDA'; moviendose = true; }
         else if (teclas['d']) { movX += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
-        
+
         
         if (!this.mapa.esSolido(this.x + movX, this.y, this.ancho, this.alto)) {
+
             
             this.x += movX;
         }
 
         if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY)) {
+            
+            
             this.y += movY;
         }
 
-        
-        
+  
         if (moviendose) {
             this.estadoActual = 'WALK_'+nuevoEstado;
             this.ultimaDireccion = nuevoEstado;
@@ -71,8 +76,8 @@ export class Jugador extends Entidad {
         const config = this.animaciones[this.estadoActual];
         this.sprite.actualizar(config.frames, config.velocidad);
 
-        this.x = Math.max(0, Math.min(this.x, canvas.width - this.ancho));
-        this.y = Math.max(0, Math.min(this.y, canvas.height - this.alto));
+        this.x = Math.max(0, Math.min(this.x, canvas.width - this.ancho - this.auxX));
+        this.y = Math.max(0, Math.min(this.y, canvas.height - this.alto - this.auxY));
     }
 
     swapAnimator(anim){
@@ -82,10 +87,18 @@ export class Jugador extends Entidad {
         }
     }
 
-    dibujar(ctx) {
+    dibujar(ctx,camara) {
+ 
+
+        if(camara.estaMoviendose()){
+         this.auxX = -Math.floor(camara.x); 
+         this.auxY =   -Math.floor(camara.y); 
+        }
+
+
         const anim = this.animaciones[this.estadoActual];
         this.sprite.dibujar(ctx, this.x - 6, this.y, this.ancho, this.alto, anim.fila,2,4,true);
-       
+        
         if(this.debug){
         ctx.strokeStyle = "red";
         ctx.strokeRect(this.x, this.y, this.ancho, this.alto);

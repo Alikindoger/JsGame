@@ -1,3 +1,5 @@
+
+
 export class Mapa {
     constructor(tile_size,cutSize,debug = false) {
         this.tileSize = tile_size;
@@ -8,6 +10,17 @@ export class Mapa {
             [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
 
         this.tileConfig = {
@@ -34,11 +47,12 @@ export class Mapa {
             return true;
         }
 
+        const bloquesAColisionar = [2];
         return (
-            this.datos[sup][izq] === 1 ||
-            this.datos[sup][der] === 1 ||
-            this.datos[inf][izq] === 1 ||
-            this.datos[inf][der] === 1
+            bloquesAColisionar.includes(this.datos[sup][izq]) ||
+            bloquesAColisionar.includes(this.datos[sup][der]) ||
+            bloquesAColisionar.includes(this.datos[inf][izq]) ||
+            bloquesAColisionar.includes(this.datos[inf][der])
         );
     }
 

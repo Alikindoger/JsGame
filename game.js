@@ -1,5 +1,6 @@
 import { Mapa } from './mapa.js';
 import { Jugador } from './jugador.js';
+import { Camera } from './camara.js';
 
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
@@ -25,6 +26,15 @@ let ultimoTiempo = 0;
 const TILE_SIZE = 64;
 const mapa = new Mapa(TILE_SIZE,16,true);
 const jugador = new Jugador(192+64, 128,mapa,true);
+
+const camara = new Camera(
+    canvas.width, 
+    canvas.height, 
+    mapa.datos[0].length * TILE_SIZE, 
+    mapa.datos.length * TILE_SIZE
+);
+
+
 const teclas = {};
 
 // --- INPUTS ---
@@ -46,8 +56,8 @@ function buclePrincipal(tiempoActual) {
     acumulador += frameTime;
 
     while (acumulador >= TICK_TIME) {
-        // La lógica del jugador ahora vive en su propia clase
         jugador.actualizar(teclas, canvas);
+        camara.centrarEn(jugador.x, jugador.y, jugador.ancho, jugador.alto);
         acumulador -= TICK_TIME;
         
         
@@ -55,8 +65,15 @@ function buclePrincipal(tiempoActual) {
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.save();
+    ctx.translate(-Math.floor(camara.x), -Math.floor(camara.y));
+    
     mapa.dibujar(ctx);
-    jugador.dibujar(ctx);
+    jugador.dibujar(ctx,camara);
+    ctx.restore();
+
+     
+
     requestAnimationFrame(buclePrincipal);
 }
 configurarPixelArt();
