@@ -6,13 +6,21 @@ export class Jugador extends Entidad {
         super(x, y, 64, 64, null);
         
         // Cargamos la hoja de sprites (ejemplo: cada frame es de 32x32)
+        this.IdleAnimator = new Animador('./assets/idle_player.png',16,16);
+        this.WalkAnimator = new Animador('./assets/walk_player.png',16,16);
+
         this.sprite = new Animador('./assets/idle_player.png', 16, 16);
         
         this.animaciones = {
             'IDLE_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
             'IDLE_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
             'IDLE_IZQUIERDA': {fila:5, frames: 4, velocidad: 12},
-            'IDLE_DERECHA':{fila:2, frames: 4, velocidad: 12}
+            'IDLE_DERECHA':{fila:2, frames: 4, velocidad: 12},
+
+            'WALK_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
+            'WALK_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
+            'WALK_IZQUIERDA': {fila:5, frames: 4, velocidad: 12},
+            'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12}
 
         };
 
@@ -32,20 +40,27 @@ export class Jugador extends Entidad {
         else if (teclas['d']) { this.x += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
 
         if (moviendose) {
-            this.estadoActual = 'IDLE_ARRIBA';
+            this.estadoActual = 'WALK_'+nuevoEstado;
             this.ultimaDireccion = nuevoEstado;
+            this.swapAnimator(this.WalkAnimator);
         } else {
+            this.swapAnimator(this.IdleAnimator);
             this.estadoActual = 'IDLE_'+this.ultimaDireccion;
         }
 
-        
-        console.log(this.ultimaDireccion);
         
         const config = this.animaciones[this.estadoActual];
         this.sprite.actualizar(config.frames, config.velocidad);
 
         this.x = Math.max(0, Math.min(this.x, canvas.width - this.ancho));
         this.y = Math.max(0, Math.min(this.y, canvas.height - this.alto));
+    }
+
+    swapAnimator(anim){
+        if(anim != this.sprite){
+            this.sprite = anim;
+            this.sprite.frameActual = 0;
+        }
     }
 
     dibujar(ctx) {
