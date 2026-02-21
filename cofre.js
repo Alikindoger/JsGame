@@ -1,7 +1,7 @@
 import { Interactuable } from "./interactable.js";
 export class Cofre extends Interactuable {
-    constructor(x, y) {
-        super(x, y, 64, 64, "cofre_tesoro");
+    constructor(x, y,dialogo) {
+        super(x, y, 64, 64, "cofre_tesoro",dialogo);
         this.abierto = false;
     }
 

@@ -7,10 +7,10 @@ const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
 
 function configurarPixelArt() {
-    ctx.imageSmoothingEnabled = false;       // Estándar
-    ctx.mozImageSmoothingEnabled = false;    // Firefox antiguo
-    ctx.webkitImageSmoothingEnabled = false; // Safari/Chrome antiguo
-    ctx.msImageSmoothingEnabled = false;     // IE
+ctx.imageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;     // IE
 }
 
 

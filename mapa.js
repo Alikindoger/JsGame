@@ -32,7 +32,8 @@ export class Mapa {
         };
 
         this.objetosInteractuables = {};
-        this.registrarObjeto(4,2,new Cofre(256,128));
+        this.registrarObjeto(4,2,new Cofre(256,128, "hola hola hola hola hola"));
+
 
         this.imagen = new Image();
         this.imagen.src = './assets/test_tileset.png';

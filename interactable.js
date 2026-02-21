@@ -1,10 +1,11 @@
 export class Interactuable {
-    constructor(x, y, ancho, alto, id) {
+    constructor(x, y, ancho, alto, id,dialogo = null) {
         this.x = x;
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
         this.id = id;
+        this.dialogo = dialogo;
         }
 
     interact() {
