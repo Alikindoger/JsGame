@@ -1,4 +1,4 @@
-
+import { Cofre } from "./cofre.js";
 
 export class Mapa {
     constructor(tile_size,cutSize,debug = false) {
@@ -9,19 +9,21 @@ export class Mapa {
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
         
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
+
+        
 
         this.tileConfig = {
             0: { tx: 9, ty: 2 }, // Suelo (Césped)
@@ -29,12 +31,17 @@ export class Mapa {
             2: { tx: 0, ty: 1 }, // Agua o Decoración
         };
 
+        this.objetosInteractuables = {};
+        this.registrarObjeto(4,2,new Cofre(256,128));
+
         this.imagen = new Image();
         this.imagen.src = './assets/test_tileset.png';
         this.cargada = false;
         this.imagen.onload = () => this.cargada = true;
         this.debug = debug;
     }
+
+    
 
     esSolido(x, y, ancho, alto) {
         const izq = Math.floor(x / this.tileSize);
@@ -47,7 +54,7 @@ export class Mapa {
             return true;
         }
 
-        const bloquesAColisionar = [2];
+        const bloquesAColisionar = [1,2];
         return (
             bloquesAColisionar.includes(this.datos[sup][izq]) ||
             bloquesAColisionar.includes(this.datos[sup][der]) ||
@@ -56,7 +63,21 @@ export class Mapa {
         );
     }
 
+    registrarObjeto(col, fila, objeto) {
+    const llave = `${col}-${fila}`;
+    this.objetosInteractuables[llave] = objeto;
+    }
+
+    obtenerObjetoEnPixeles(x, y) {
+    const col = Math.floor(x / this.tileSize);
+    const fila = Math.floor(y / this.tileSize);
+    const llave = `${col}-${fila}`;
+    console.log(llave);
     
+
+    return this.objetosInteractuables[llave] || null; // Devuelve el objeto o null si está vacío
+    }
+
 
     dibujar(ctx) {
         if (!this.cargada) return;
@@ -109,5 +130,11 @@ export class Mapa {
                 }
             }
         }
+
+        for(const object in this.objetosInteractuables){
+            this.objetosInteractuables[object].dibujar(ctx);
+            
+        }
+
 }
 }

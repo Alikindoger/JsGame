@@ -24,8 +24,8 @@ let ultimoTiempo = 0;
 
 
 const TILE_SIZE = 64;
-const mapa = new Mapa(TILE_SIZE,16,true);
-const jugador = new Jugador(192+64, 128,mapa,true);
+const mapa = new Mapa(TILE_SIZE,16,false);
+const jugador = new Jugador(192+64, 128*4,mapa,false);
 
 const camara = new Camera(
     canvas.width, 
@@ -40,6 +40,7 @@ const teclas = {};
 // --- INPUTS ---
 window.onkeydown = (e) => teclas[e.key] = true;
 window.onkeyup = (e) => teclas[e.key] = false;
+
 
 // --- BUCLE ---
 function buclePrincipal(tiempoActual) {

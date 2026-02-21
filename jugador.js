@@ -1,5 +1,6 @@
 import { Entidad } from './entidad.js';
 import { Animador } from './animador.js';
+import { Cofre } from './cofre.js';
 
 export class Jugador extends Entidad {
     constructor(x, y,mapa,debug = false) {
@@ -49,6 +50,12 @@ export class Jugador extends Entidad {
         if (teclas['a']) { movX -= this.velocidad; nuevoEstado = 'IZQUIERDA'; moviendose = true; }
         else if (teclas['d']) { movX += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
 
+        if(teclas['e']){
+            
+            this.interact();
+        }
+        
+
         
         if (!this.mapa.esSolido(this.x + movX, this.y, this.ancho, this.alto)) {
 
@@ -79,6 +86,16 @@ export class Jugador extends Entidad {
         this.x = Math.max(0, Math.min(this.x, canvas.width - this.ancho - this.auxX));
         this.y = Math.max(0, Math.min(this.y, canvas.height - this.alto - this.auxY));
     }
+
+    interact(){
+        
+
+        const checkX = this.x + 32;
+        const checkY = this.y + 70;
+        let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY))
+        objeto.interact();
+    }
+
 
     swapAnimator(anim){
         if(anim != this.sprite){
