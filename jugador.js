@@ -88,12 +88,29 @@ export class Jugador extends Entidad {
     }
 
     interact(){
-        
+         let checkX = 0;
+         let checkY = 0;
 
-        const checkX = this.x + 32;
-        const checkY = this.y + 70;
+        if(this.estadoActual.includes("ABAJO")){
+            checkX = this.x + 32;
+            checkY = this.y + 64;
+        }
+        else if(this.estadoActual.includes("ARRIBA")){
+            checkX = this.x + 32;
+            checkY = this.y - 10;
+        }
+        else if(this.estadoActual.includes("DERECHA")){
+            checkX = this.x + 64;
+            checkY = this.y + 32;
+        }
+        else if(this.estadoActual.includes("IZQUIERDA")){
+            checkX = this.x - 10;
+            checkY = this.y + 32;
+        }
+
         let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY))
-        objeto.interact();
+        if(objeto != null) objeto.interact();
+
     }
 
 

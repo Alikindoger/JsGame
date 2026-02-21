@@ -49,18 +49,31 @@ export class Mapa {
         const sup = Math.floor(y / this.tileSize);
         const inf = Math.floor((y + alto - 1) / this.tileSize);
         
-        
-        if (sup < 0 || inf >= this.datos.length || izq < 0 || der >= this.datos[0].length) {
-            return true;
-        }
 
-        const bloquesAColisionar = [1,2];
-        return (
+            const bloquesAColisionar = [1,2];
+        const colisionTile = 
             bloquesAColisionar.includes(this.datos[sup][izq]) ||
             bloquesAColisionar.includes(this.datos[sup][der]) ||
             bloquesAColisionar.includes(this.datos[inf][izq]) ||
-            bloquesAColisionar.includes(this.datos[inf][der])
-        );
+            bloquesAColisionar.includes(this.datos[inf][der]);
+
+        if (colisionTile) return true;
+
+        const esquinas = [
+        `${izq}-${sup}`, // superior izquierda
+        `${der}-${sup}`, // superior derecha
+        `${izq}-${inf}`, // inferior izquierda
+        `${der}-${inf}`  // inferior derecha
+    ];
+
+    for (let llave of esquinas) {
+        const obj = this.objetosInteractuables[llave];
+            if(obj){ return true; break;}
+           
+    }
+
+    return false;
+
     }
 
     registrarObjeto(col, fila, objeto) {
