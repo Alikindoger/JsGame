@@ -85,7 +85,6 @@ export class Mapa {
     const col = Math.floor(x / this.tileSize);
     const fila = Math.floor(y / this.tileSize);
     const llave = `${col}-${fila}`;
-    console.log(llave);
     
 
     return this.objetosInteractuables[llave] || null; // Devuelve el objeto o null si está vacío

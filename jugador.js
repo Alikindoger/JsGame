@@ -6,7 +6,7 @@ export class Jugador extends Entidad {
     constructor(x, y,mapa,debug = false) {
         super(x, y, 64, 64, null);
 
-        this.hitBoxX = 64;
+        this.hitBoxX = 50;
         this.hitBoxY = 64;
 
         this.mapa = mapa;
@@ -35,6 +35,8 @@ export class Jugador extends Entidad {
 
         this.auxX = 0;
         this.auxY = 0;
+
+        this.objetoEnfocado = null;
     }
 
 
@@ -57,9 +59,8 @@ export class Jugador extends Entidad {
         
 
         
-        if (!this.mapa.esSolido(this.x + movX, this.y, this.ancho, this.alto)) {
+        if (!this.mapa.esSolido(this.x + movX, this.y,this.hitBoxX,this.hitBoxY)) {
 
-            
             this.x += movX;
         }
 
@@ -69,7 +70,26 @@ export class Jugador extends Entidad {
             this.y += movY;
         }
 
-  
+        let frenteX = this.x + this.ancho / 2;
+        let frenteY = this.y + this.alto / 2;
+        const distanciaCheck = 32;
+
+        if(this.estadoActual.includes("IDLE_ABAJO")){
+            frenteY += 70;
+        }
+        if(this.estadoActual.includes("IDLE_ARRIBA")){
+            frenteY -= 70;
+        }
+        if(this.estadoActual.includes("IDLE_DERECHA")){
+            frenteX += 70;
+        }
+        if(this.estadoActual.includes("IDLE_IZQUIERDA")){
+            frenteX -= 70;
+        }
+        
+        this.objetoEnfocado = this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY);
+        console.log(this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY));
+        
         if (moviendose) {
             this.estadoActual = 'WALK_'+nuevoEstado;
             this.ultimaDireccion = nuevoEstado;
@@ -131,11 +151,11 @@ export class Jugador extends Entidad {
 
 
         const anim = this.animaciones[this.estadoActual];
-        this.sprite.dibujar(ctx, this.x - 6, this.y, this.ancho, this.alto, anim.fila,2,4,true);
+        this.sprite.dibujar(ctx, this.x - 13, this.y, this.ancho, this.alto, anim.fila,2,4,true);
         
         if(this.debug){
         ctx.strokeStyle = "red";
-        ctx.strokeRect(this.x, this.y, this.ancho, this.alto);
+        ctx.strokeRect(this.x, this.y, this.hitBoxX, this.hitBoxY);
         ctx.fillStyle = "white";
         ctx.fillRect(this.x, this.y, 4, 4);
         }
