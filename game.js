@@ -30,7 +30,7 @@ const TILE_SIZE = 64;
 const mapa = new Mapa(TILE_SIZE,16,false);
 const jugador = new Jugador(192+64, 128*4,mapa,true);
 
-const interfaz = new Interfaz(32); // 32 es el TILE_SIZE
+const interfaz = new Interfaz(32);
 
 
 const camara = new Camera(

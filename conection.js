@@ -14,11 +14,22 @@ class Conection {
     console.log("Activando bocadillo con el texto: " + data.texto);
     });
 
+        this.on("abierto", () => {
+            conn.enviar("NUEVO_JUGADOR", {
+              nombre: "Jugador_" + Math.floor(Math.random() * 1000)
+            });
+    });
+
+    conn.on("NUEVO_JUGADOR", (data) => {
+    console.log("¡Un nuevo compañero ha aparecido!", data.nombre);
+    });
+
         if (this.socket) return; 
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             this.conectado = true;
             console.log("Conectado al servidor");
+            this.eventos["abierto"]();
         };
 
         this.socket.onmessage = (event) => {
