@@ -37,7 +37,29 @@ export class Jugador extends Entidad {
         this.auxY = 0;
 
         this.objetoEnfocado = null;
+
+        this.input = {
+            pressed: {},  // Teclas que están bajadas actualmente
+            justPressed: {} // Teclas que se acaban de pulsar en este instante
+        };
+
+        window.addEventListener("keydown", (e) => {
+            const key = e.key.toLowerCase();
+            // Si la tecla no estaba ya pulsada, significa que se acaba de pulsar ahora
+            if (!this.input.pressed[key]) {
+                this.input.justPressed[key] = true;
+            }
+            this.input.pressed[key] = true;
+        });
+
+        window.addEventListener("keyup", (e) => {
+            const key = e.key.toLowerCase();
+            this.input.pressed[key] = false;
+            this.input.justPressed[key] = false;
+});
+
     }
+    
 
 
     actualizar(teclas, canvas) {
@@ -52,9 +74,11 @@ export class Jugador extends Entidad {
         if (teclas['a']) { movX -= this.velocidad; nuevoEstado = 'IZQUIERDA'; moviendose = true; }
         else if (teclas['d']) { movX += this.velocidad; nuevoEstado = 'DERECHA'; moviendose = true; }
 
-        if(teclas['e']){
+        if (this.input.justPressed['e']) {
+            console.log("si");
             
             this.interact();
+            this.input.justPressed['e'] = false;
         }
         
 
@@ -88,7 +112,6 @@ export class Jugador extends Entidad {
         }
         
         this.objetoEnfocado = this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY);
-        console.log(this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY));
         
         if (moviendose) {
             this.estadoActual = 'WALK_'+nuevoEstado;
@@ -129,7 +152,7 @@ export class Jugador extends Entidad {
         }
 
         let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY))
-        if(objeto != null) objeto.interact();
+        if(objeto != null && objeto.canInteract) objeto.interact();
 
     }
 

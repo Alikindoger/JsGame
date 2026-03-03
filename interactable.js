@@ -6,6 +6,7 @@ export class Interactuable {
         this.alto = alto;
         this.id = id;
         this.dialogo = dialogo;
+        this.canInteract = true;
         }
 
     interact() {

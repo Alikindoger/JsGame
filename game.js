@@ -1,3 +1,4 @@
+import { conn } from './conection.js';
 import { Mapa } from './mapa.js';
 import { Jugador } from './jugador.js';
 import { Camera } from './camara.js';
@@ -10,7 +11,8 @@ function configurarPixelArt() {
 ctx.imageSmoothingEnabled = false;
 ctx.mozImageSmoothingEnabled = false;
 ctx.webkitImageSmoothingEnabled = false;
-ctx.msImageSmoothingEnabled = false;     // IE
+ctx.msImageSmoothingEnabled = false;
+
 }
 
 
@@ -41,6 +43,8 @@ const camara = new Camera(
 
 const teclas = {};
 
+
+
 // --- INPUTS ---
 window.onkeydown = (e) => teclas[e.key] = true;
 window.onkeyup = (e) => teclas[e.key] = false;
@@ -64,8 +68,6 @@ function buclePrincipal(tiempoActual) {
         jugador.actualizar(teclas, canvas);
         camara.centrarEn(jugador.x, jugador.y, jugador.ancho, jugador.alto);
         acumulador -= TICK_TIME;
-        
-        
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -81,5 +83,7 @@ function buclePrincipal(tiempoActual) {
 
     requestAnimationFrame(buclePrincipal);
 }
+
+conn.conectar();
 configurarPixelArt();
 requestAnimationFrame(buclePrincipal);
