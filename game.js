@@ -3,6 +3,8 @@ import { Mapa } from './mapa.js';
 import { Jugador } from './jugador.js';
 import { Camera } from './camara.js';
 import { Interfaz } from './interfaz.js';
+import { LocalPlayer } from './localPlayer.js';
+import { NetworkedPlayer } from './networkedPlayer.js';
 
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
@@ -28,7 +30,9 @@ let ultimoTiempo = 0;
 
 const TILE_SIZE = 64;
 const mapa = new Mapa(TILE_SIZE,16,false);
-const jugador = new Jugador(192+64, 128*4,mapa,true);
+
+const jugador2 = new NetworkedPlayer(192,128*4, "bOT",mapa);
+
 
 const interfaz = new Interfaz(32);
 
@@ -65,6 +69,7 @@ function buclePrincipal(tiempoActual) {
     acumulador += frameTime;
 
     while (acumulador >= TICK_TIME) {
+        
         jugador.actualizar(teclas, canvas);
         camara.centrarEn(jugador.x, jugador.y, jugador.ancho, jugador.alto);
         acumulador -= TICK_TIME;
@@ -77,6 +82,7 @@ function buclePrincipal(tiempoActual) {
     
     mapa.dibujar(ctx);
     jugador.dibujar(ctx,camara);
+    jugador2.dibujar(ctx,camara);
     ctx.restore();
 
     interfaz.dibujar(ctx, camara, jugador);
@@ -84,6 +90,7 @@ function buclePrincipal(tiempoActual) {
     requestAnimationFrame(buclePrincipal);
 }
 
-conn.conectar();
+conn.conectar(); // TO-DO alguna forma de esperar conectar
+const jugador = new LocalPlayer(192+64,128*4, conn.nombre,mapa);
 configurarPixelArt();
 requestAnimationFrame(buclePrincipal);

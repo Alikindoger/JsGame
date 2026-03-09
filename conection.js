@@ -4,7 +4,9 @@ class Conection {
         this.url = 'ws://localhost:8080';
         this.socket = null;
         this.eventos = {};
+        this.players = {};
         this.conectado = false;
+        this.nombre = "";
     }
 
     conectar() {
@@ -16,18 +18,35 @@ class Conection {
 
         this.on("abierto", () => {
             conn.enviar("NUEVO_JUGADOR", {
-              nombre: "Jugador_" + Math.floor(Math.random() * 1000)
+              nombre: "Jugador_" + this.nombre
             });
+
     });
 
     conn.on("NUEVO_JUGADOR", (data) => {
-    console.log("¡Un nuevo compañero ha aparecido!", data.nombre);
+    if (data.id === miIDLocal) return;
+
+
+    // Creamos la instancia y la guardamos en el diccionario
+    otrosJugadores[data.id] = new NetworkedPlayer(
+        data.gridX, 
+        data.gridY, 
+        data.nombre, 
+        spriteSheetCompartida, 
+        animacionesGlobales, 
+        data.id
+        );
     });
+
+
 
         if (this.socket) return; 
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             this.conectado = true;
+            console.log("primer");
+            
+            this.nombre = Math.floor(Math.random() * 1000);
             console.log("Conectado al servidor");
             this.eventos["abierto"]();
         };
