@@ -34,7 +34,16 @@ actualizar(teclas, canvas) {
         }
         if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY)) {
             this.y += movY;
-        }        
+        }
+        
+        if(moviendose){
+            conn.enviar("MOVIMIENTO",{
+                x : this.x,
+                y : this.y,
+                estadoActual : this.estadoActual
+            });
+        }
+
 
                 let frenteX = this.x + this.ancho / 2;
         let frenteY = this.y + this.alto / 2;

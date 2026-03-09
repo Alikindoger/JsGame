@@ -82,7 +82,11 @@ function buclePrincipal(tiempoActual) {
     
     mapa.dibujar(ctx);
     jugador.dibujar(ctx,camara);
-    jugador2.dibujar(ctx,camara);
+
+    for(const player of Object.values(conn.players)){
+        player.dibujar(ctx,camara);
+        
+    }
     ctx.restore();
 
     interfaz.dibujar(ctx, camara, jugador);

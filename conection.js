@@ -1,4 +1,5 @@
 // src/Conexion.js
+import { NetworkedPlayer } from "./networkedPlayer.js";
 class Conection {
     constructor() {
         this.url = 'ws://localhost:8080';
@@ -7,35 +8,43 @@ class Conection {
         this.players = {};
         this.conectado = false;
         this.nombre = "";
+        this.miIDLocal = null;
+        
     }
 
     conectar() {
         
 
-        this.on("INTERACCION", (data) => {
+    this.on("INTERACCION", (data) => {
     console.log("Activando bocadillo con el texto: " + data.texto);
     });
 
-        this.on("abierto", () => {
-            conn.enviar("NUEVO_JUGADOR", {
-              nombre: "Jugador_" + this.nombre
-            });
-
+    this.on("abierto", () => {
+        conn.enviar("NUEVO_JUGADOR", {
+        nombre: "Jugador_" + this.nombre
+        });
     });
 
     conn.on("NUEVO_JUGADOR", (data) => {
-    if (data.id === miIDLocal) return;
+    
+    if(this.miIDLocal == null){
+        this.miIDLocal = data.id;
+    }
+    if (data.id === this.miIDLocal) return;
 
-
-    // Creamos la instancia y la guardamos en el diccionario
-    otrosJugadores[data.id] = new NetworkedPlayer(
-        data.gridX, 
-        data.gridY, 
-        data.nombre, 
-        spriteSheetCompartida, 
-        animacionesGlobales, 
-        data.id
-        );
+    conn.on("MOVIMIENTO", (data) => {
+    const p = this.players[data.id];
+    if (p) {
+        p.x = data.x;
+        p.y = data.y;
+        p.estadoActual = data.estadoActual;
+        }
+    });
+    this.players[data.id] = new NetworkedPlayer(
+        192+64,128*4, 
+        data.nombre,
+        null
+        );        
     });
 
 
@@ -53,6 +62,8 @@ class Conection {
 
         this.socket.onmessage = (event) => {
 
+            console.log(event.data);
+            
             const data = JSON.parse(event.data);
             
             if (this.eventos[data.tipo]) {

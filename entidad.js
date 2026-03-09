@@ -17,7 +17,6 @@ export class Entidad {
         this.imagen.onload = () => { this.cargada = true; };
     }
 
-    // El suavizado vive aquí para que lo hereden todos
     actualizarSuavizado() {
         const destinoX = this.gridX * this.tileSize;
         const destinoY = this.gridY * this.tileSize;
@@ -25,7 +24,6 @@ export class Entidad {
         this.y += (destinoY - this.y) * 0.2;
     }
 
-    // Dibujar ahora recibe la cámara para ser relativo al mapa
     dibujar(ctx, camara) {
         const screenX = Math.floor(this.x - camara.x);
         const screenY = Math.floor(this.y - camara.y);
