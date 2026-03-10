@@ -1,5 +1,6 @@
 // src/Conexion.js
 import { NetworkedPlayer } from "./networkedPlayer.js";
+import { Estado } from "./game.js";
 class Conection {
     constructor() {
         this.url = 'ws://localhost:8080';
@@ -14,6 +15,19 @@ class Conection {
 
     conectar() {
         
+    conn.on("BIENVENIDA", (data) => {
+        console.log("Servidor nos ha reconocido. ID asignado:", data.id);
+        
+
+        this.miIDLocal = data.id;
+
+        Estado.textoCarga.innerText = "¡Mundo sincronizado!";
+        setTimeout(() => {
+            Estado.pantalla.style.display = "none";
+            Estado.juegoIniciado = true;
+        }, 500);
+    });
+
 
     this.on("INTERACCION", (data) => {
     console.log("Activando bocadillo con el texto: " + data.texto);
@@ -26,10 +40,7 @@ class Conection {
     });
 
     conn.on("NUEVO_JUGADOR", (data) => {
-    
-    if(this.miIDLocal == null){
-        this.miIDLocal = data.id;
-    }
+
     if (data.id === this.miIDLocal) return;
 
     conn.on("MOVIMIENTO", (data) => {
@@ -45,6 +56,12 @@ class Conection {
         data.nombre,
         null
         );        
+    });
+
+    conn.on("desconectado", () => {
+        Estado.pantalla.style.display = "flex";
+        Estado.textoCarga.innerText = "Conexión perdida. Reintentando...";
+        Estado.juegoIniciado = false;
     });
 
 

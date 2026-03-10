@@ -9,6 +9,16 @@ import { NetworkedPlayer } from './networkedPlayer.js';
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
 
+export const Estado = {
+    juegoIniciado: false,
+    pantalla: null,
+    textoCarga: null
+}
+Estado.juegoIniciado = false;
+Estado.pantalla = document.getElementById('pantalla-carga');
+Estado.textoCarga = document.getElementById('mensaje-carga');
+
+
 function configurarPixelArt() {
 ctx.imageSmoothingEnabled = false;
 ctx.mozImageSmoothingEnabled = false;
@@ -56,6 +66,12 @@ window.onkeyup = (e) => teclas[e.key] = false;
 
 // --- BUCLE ---
 function buclePrincipal(tiempoActual) {
+
+    if (!Estado.juegoIniciado) {
+        requestAnimationFrame(buclePrincipal);
+        return; 
+    }
+
     if (!ultimoTiempo) {
         ultimoTiempo = tiempoActual;
         requestAnimationFrame(buclePrincipal);
@@ -93,8 +109,7 @@ function buclePrincipal(tiempoActual) {
 
     requestAnimationFrame(buclePrincipal);
 }
-
-conn.conectar(); // TO-DO alguna forma de esperar conectar
+conn.conectar(); 
 const jugador = new LocalPlayer(192+64,128*4, conn.nombre,mapa);
 configurarPixelArt();
 requestAnimationFrame(buclePrincipal);
