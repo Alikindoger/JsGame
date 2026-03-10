@@ -67,7 +67,7 @@ window.onkeyup = (e) => teclas[e.key] = false;
 // --- BUCLE ---
 function buclePrincipal(tiempoActual) {
 
-    if (!Estado.juegoIniciado) {
+    if (!Estado.juegoIniciado) {        
         requestAnimationFrame(buclePrincipal);
         return; 
     }

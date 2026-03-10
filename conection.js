@@ -37,6 +37,12 @@ class Conection {
         conn.enviar("NUEVO_JUGADOR", {
         nombre: "Jugador_" + this.nombre
         });
+
+                Estado.textoCarga.innerText = "¡Mundo sincronizado!";
+        setTimeout(() => {
+            Estado.pantalla.style.display = "none";
+            Estado.juegoIniciado = true;
+        }, 500);
     });
 
     conn.on("NUEVO_JUGADOR", (data) => {
@@ -66,11 +72,10 @@ class Conection {
 
 
 
-        if (this.socket) return; 
+        if (this.conectado) return; 
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             this.conectado = true;
-            console.log("primer");
             
             this.nombre = Math.floor(Math.random() * 1000);
             console.log("Conectado al servidor");
@@ -91,6 +96,7 @@ class Conection {
 
         this.socket.onclose = () => {
             this.conectado = false;
+            this.eventos["desconectado"]();
             console.warn("Conexión perdida con el servidor");
         };
 
