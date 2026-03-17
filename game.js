@@ -36,7 +36,7 @@ canvas.height = window.innerHeight;
 const btnConectar = document.getElementById('btn-conectar');
 const inputUser = document.getElementById('input-usuario');
 const inputPass = document.getElementById('input-pass');
-const errorLogin = document.getElementById('error-login');
+const inputIp = document.getElementById('input-ip');
 
 // --- ESTADO DEL JUEGO ---
 const TICKS_POR_SEGUNDO = 60;
@@ -50,13 +50,15 @@ export const mapa = new Mapa(TILE_SIZE,16,false);
 
 const interfaz = new Interfaz(32);
 
-btnConectar.onclick = () => {
+btnConectar.onclick = async () => {
     const user = inputUser.value;
     const pass = inputPass.value;
-    
-    if (user && pass) {
-        // Enviamos el login al servidor
-        console.log("si");
+    const ip = inputIp.value;
+    conn.url = "ws://"+ ip+":8080";
+    conn.conectar(); 
+
+    if (user && pass) { 
+        await conn.esperarConexion(); 
         
         conn.enviar("LOGIN", { usuario: user, password: pass });
     } else {
@@ -127,6 +129,5 @@ function buclePrincipal(tiempoActual) {
     requestAnimationFrame(buclePrincipal);
 }
 
-conn.conectar(); 
 configurarPixelArt();
 requestAnimationFrame(buclePrincipal);

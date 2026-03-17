@@ -28,6 +28,10 @@
     <input type="password" id="input-pass" placeholder="Contraseña">
     <button id="btn-conectar">Conectar</button>
     <p id="error-login" style="color: red; display: none;"></p>
+    <div style = "text-align: center; padding-top: 10px;">
+        <input type="text" id="input-ip" placeholder="localhost">
+    </div>
+    
 </div>
     
     <div class="spinner"></div>
@@ -44,7 +48,7 @@
         animation: spin 1s linear infinite;
         margin-bottom: 20px;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes spin { 0% {  transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
     <canvas id="juegoCanvas"></canvas>
     <script type="module" src="game.js"></script>

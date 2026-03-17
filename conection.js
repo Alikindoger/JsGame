@@ -14,6 +14,39 @@ class Conection {
         
     }
 
+    esperarConexion() {
+        return new Promise((resolve, reject) => {
+            // Si ya está abierto, resolvemos inmediatamente
+            if (this.socket.readyState === WebSocket.OPEN) {
+                resolve();
+                return;
+            }
+
+            // Si el socket se cierra o da error mientras esperamos
+            if (this.socket.readyState === WebSocket.CLOSED) {
+                reject("No se pudo conectar: el socket está cerrado.");
+                return;
+            }
+
+            // Configuramos un intervalo que chequea el estado cada 100ms
+            const intervalo = setInterval(() => {
+                if (this.socket.readyState === WebSocket.OPEN) {
+                    clearInterval(intervalo);
+                    resolve();
+                } else if (this.socket.readyState === WebSocket.CLOSED) {
+                    clearInterval(intervalo);
+                    reject("La conexión falló durante la espera.");
+                }
+            }, 100);
+
+            // Opcional: Timeout por si el servidor nunca responde (10 segundos)
+            setTimeout(() => {
+                clearInterval(intervalo);
+                reject("Tiempo de espera agotado (Timeout)");
+            }, 10000);
+        });
+    }
+
     conectar() {
 
     conn.on("LOGIN_EXITO", (data) => {
@@ -35,6 +68,8 @@ class Conection {
     console.log("Activando bocadillo con el texto: " + data.texto);
     });
 
+
+    //CREAMOS OTRO JUGADORES
     conn.on("NUEVO_JUGADOR", (data) => {
 
     if (data.id === this.miIDLocal) return;
@@ -55,15 +90,16 @@ class Conection {
         p.estadoActual = data.estadoActual;
         }
     });
-       
 
-
+    //CUANDO SE PIERDE LA CONEXION CON EL SERVIDOR
     conn.on("desconectado", () => {
         Estado.pantalla.style.display = "flex";
         Estado.textoCarga.innerText = "Conexión perdida. Reintentando...";
         Estado.juegoIniciado = false;
+        this.conectar();
     });
 
+    //CUANDO UN JUGADOR SE SALE DEL SERVIDOR
     conn.on("DESCONEXION", (data) => {
         delete this.players[data.id]; //borramos la instancia y del diccionario
         
@@ -75,10 +111,8 @@ class Conection {
         this.socket = new WebSocket(this.url);
         this.socket.onopen = () => {
             this.conectado = true;
-            
             this.nombre = Math.floor(Math.random() * 1000);
             console.log("Conectado al servidor");
-           // this.eventos["abierto"]();
         };
 
         this.socket.onmessage = (event) => {
@@ -108,6 +142,8 @@ class Conection {
     }
 
     enviar(tipo, datos = {}) {
+        console.log("mando");
+        
         if (this.conectado && this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(JSON.stringify({ tipo, ...datos }));
         }
