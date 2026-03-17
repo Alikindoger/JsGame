@@ -1,6 +1,7 @@
 // src/Conexion.js
 import { NetworkedPlayer } from "./networkedPlayer.js";
-import { Estado } from "./game.js";
+import { LocalPlayer } from "./localPlayer.js";
+import { Estado, mapa } from "./game.js";
 class Conection {
     constructor() {
         this.url = 'ws://localhost:8080';
@@ -14,18 +15,19 @@ class Conection {
     }
 
     conectar() {
-        
-    conn.on("BIENVENIDA", (data) => {
-        console.log("Servidor nos ha reconocido. ID asignado:", data.id);
-        
 
-        this.miIDLocal = data.id;
+    conn.on("LOGIN_EXITO", (data) => {
+    console.log("Login correcto, creando jugador...");
+    
+    Estado.jugador = new LocalPlayer(data.x, data.y, data.nombre, mapa);
+    
+    document.getElementById('pantalla-carga').style.display = 'none';
+    Estado.juegoIniciado = true;
+    });
 
-        Estado.textoCarga.innerText = "¡Mundo sincronizado!";
-        setTimeout(() => {
-            Estado.pantalla.style.display = "none";
-            Estado.juegoIniciado = true;
-        }, 500);
+    conn.on("LOGIN_FALLO", (data) => {
+        errorLogin.innerText = data.mensaje;
+        errorLogin.style.display = 'block';
     });
 
 
@@ -33,21 +35,17 @@ class Conection {
     console.log("Activando bocadillo con el texto: " + data.texto);
     });
 
-    this.on("abierto", () => {
-        conn.enviar("NUEVO_JUGADOR", {
-        nombre: "Jugador_" + this.nombre
-        });
-
-                Estado.textoCarga.innerText = "¡Mundo sincronizado!";
-        setTimeout(() => {
-            Estado.pantalla.style.display = "none";
-            Estado.juegoIniciado = true;
-        }, 500);
-    });
-
     conn.on("NUEVO_JUGADOR", (data) => {
 
     if (data.id === this.miIDLocal) return;
+        console.log(data.x,data.y);
+        
+        this.players[data.id] = new NetworkedPlayer(
+        data.x,data.y, 
+        data.nombre,
+        null
+        ); 
+    });
 
     conn.on("MOVIMIENTO", (data) => {
     const p = this.players[data.id];
@@ -57,18 +55,19 @@ class Conection {
         p.estadoActual = data.estadoActual;
         }
     });
-    this.players[data.id] = new NetworkedPlayer(
-        192+64,128*4, 
-        data.nombre,
-        null
-        );        
-    });
+       
+
 
     conn.on("desconectado", () => {
         Estado.pantalla.style.display = "flex";
         Estado.textoCarga.innerText = "Conexión perdida. Reintentando...";
         Estado.juegoIniciado = false;
     });
+
+    conn.on("DESCONEXION", (data) => {
+        delete this.players[data.id]; //borramos la instancia y del diccionario
+        
+    })
 
 
 
@@ -79,7 +78,7 @@ class Conection {
             
             this.nombre = Math.floor(Math.random() * 1000);
             console.log("Conectado al servidor");
-            this.eventos["abierto"]();
+           // this.eventos["abierto"]();
         };
 
         this.socket.onmessage = (event) => {

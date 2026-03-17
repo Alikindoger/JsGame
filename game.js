@@ -12,7 +12,8 @@ const ctx = canvas.getContext('2d');
 export const Estado = {
     juegoIniciado: false,
     pantalla: null,
-    textoCarga: null
+    textoCarga: null,
+    jugador : null
 }
 Estado.juegoIniciado = false;
 Estado.pantalla = document.getElementById('pantalla-carga');
@@ -31,6 +32,12 @@ ctx.msImageSmoothingEnabled = false;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+//login
+const btnConectar = document.getElementById('btn-conectar');
+const inputUser = document.getElementById('input-usuario');
+const inputPass = document.getElementById('input-pass');
+const errorLogin = document.getElementById('error-login');
+
 // --- ESTADO DEL JUEGO ---
 const TICKS_POR_SEGUNDO = 60;
 const TICK_TIME = 1000 / TICKS_POR_SEGUNDO;
@@ -39,13 +46,23 @@ let ultimoTiempo = 0;
 
 
 const TILE_SIZE = 64;
-const mapa = new Mapa(TILE_SIZE,16,false);
-
-const jugador2 = new NetworkedPlayer(192,128*4, "bOT",mapa);
-
+export const mapa = new Mapa(TILE_SIZE,16,false);
 
 const interfaz = new Interfaz(32);
 
+btnConectar.onclick = () => {
+    const user = inputUser.value;
+    const pass = inputPass.value;
+    
+    if (user && pass) {
+        // Enviamos el login al servidor
+        console.log("si");
+        
+        conn.enviar("LOGIN", { usuario: user, password: pass });
+    } else {
+        alert("Escribe usuario y contraseña");
+    }
+};
 
 const camara = new Camera(
     canvas.width, 
@@ -86,8 +103,8 @@ function buclePrincipal(tiempoActual) {
 
     while (acumulador >= TICK_TIME) {
         
-        jugador.actualizar(teclas, canvas);
-        camara.centrarEn(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+        Estado.jugador.actualizar(teclas, canvas);
+        camara.centrarEn(Estado.jugador.x, Estado.jugador.y, Estado.jugador.ancho, Estado.jugador.alto);
         acumulador -= TICK_TIME;
     }
     
@@ -97,7 +114,7 @@ function buclePrincipal(tiempoActual) {
     ctx.translate(-Math.floor(camara.x), -Math.floor(camara.y));
     
     mapa.dibujar(ctx);
-    jugador.dibujar(ctx,camara);
+    Estado.jugador.dibujar(ctx,camara);
 
     for(const player of Object.values(conn.players)){
         player.dibujar(ctx,camara);
@@ -105,11 +122,11 @@ function buclePrincipal(tiempoActual) {
     }
     ctx.restore();
 
-    interfaz.dibujar(ctx, camara, jugador);
+    interfaz.dibujar(ctx, camara, Estado.jugador);
 
     requestAnimationFrame(buclePrincipal);
 }
+
 conn.conectar(); 
-const jugador = new LocalPlayer(192+64,128*4, conn.nombre,mapa);
 configurarPixelArt();
 requestAnimationFrame(buclePrincipal);

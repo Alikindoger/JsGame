@@ -2,7 +2,7 @@ import { Jugador } from './jugador.js';
 
 export class NetworkedPlayer extends Jugador {
     constructor(gridX, gridY, nombre, mapa) {
-        super(gridX, gridY, 64, 64, null);
+        super(gridX, gridY, nombre, null);
     }
 
     actualizarDesdeRed(data) {
