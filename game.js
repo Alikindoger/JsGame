@@ -138,9 +138,11 @@ function buclePrincipal(tiempoActual) {
     
     mapa.dibujar(ctx);
     Estado.jugador.dibujar(ctx,camara);
-
+    
     for(const player of Object.values(conn.players)){
+
         player.dibujar(ctx,camara);
+
         
     }
     ctx.restore();

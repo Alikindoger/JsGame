@@ -50,12 +50,15 @@ class Conection {
     conectar() {
 
     conn.on("LOGIN_EXITO", (data) => {
-    console.log("Login correcto, creando jugador...");
-    
-    Estado.jugador = new LocalPlayer(data.x, data.y, data.nombre, mapa);
-    
-    document.getElementById('layout-principal').style.display = 'none';
-    Estado.juegoIniciado = true;
+        console.log("Login correcto, creando jugador...");
+        
+        Estado.jugador = new LocalPlayer(data.x, data.y, data.nombre, mapa);
+        
+        document.getElementById('layout-principal').style.display = 'none';
+        Estado.juegoIniciado = true;
+
+        this.miIDLocal = data.id;
+
     });
 
     conn.on("LOGIN_FALLO", (data) => {
@@ -74,6 +77,7 @@ class Conection {
 
     if (data.id === this.miIDLocal) return;
         console.log(data.x,data.y);
+        console.log(data.id);
         
         this.players[data.id] = new NetworkedPlayer(
         data.x,data.y, 

@@ -68,7 +68,7 @@ export class Jugador extends Entidad {
          this.auxX = -Math.floor(camara.x); 
          this.auxY =   -Math.floor(camara.y); 
         }
-
+        
         const screenX = Math.floor(this.x - camara.x) - this.auxX;
         const screenY = Math.floor(this.y - camara.y) - this.auxY;
 
