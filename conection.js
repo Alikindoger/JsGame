@@ -71,7 +71,6 @@ class Conection {
             
             mapa.registrarObjeto(ent.gridX,ent.gridY,ent.id);
         });
-
     });
 
     conn.on("LOGIN_FALLO", (data) => {

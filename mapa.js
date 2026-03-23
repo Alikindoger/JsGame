@@ -97,7 +97,6 @@ export class Mapa {
 
         };
         this.objetosInteractuables = {};
-        this.registrarObjeto(4,2,new Cofre(256,128, "hola hola hola hola hola"));
 
 
         this.layer0img = new Image();
