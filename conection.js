@@ -102,10 +102,7 @@ class Conection {
     conn.on("MOVIMIENTO", (data) => {
     const p = this.players[data.id];
     if (p) {
-        p.x = data.x;
-        p.y = data.y;
-        p.estadoActual = data.estadoActual;
-        }
+        p.actualizarDesdeRed(data);}
     });
 
     //CUANDO SE PIERDE LA CONEXION CON EL SERVIDOR

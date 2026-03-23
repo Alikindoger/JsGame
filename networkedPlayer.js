@@ -6,16 +6,40 @@ export class NetworkedPlayer extends Jugador {
         this.lastX = gridX;
         this.lastY = gridY;
         
+
+        this.targetX = this.x;
+        this.targetY = this.y;
+
+        this.lerpSpeed = 0.15; // Velocidad de suavizado (0.1 a 0.2 es ideal)
+        this.moving = false;
+
+        this.estadoActual = "IDLE_ABAJO";
     }
 
     actualizarDesdeRed(data) {
-        this.gridX = data.gridX;
-        this.gridY = data.gridY;
-        this.estadoActual = data.anim;
+        this.targetX = data.x;
+        this.targetY = data.y;
+        this.estadoActual = data.estadoActual;
+    }
+
+    actualizarSuavizado() {
+        // Calculamos la distancia al objetivo
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+
+        if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+            this.x = this.targetX;
+            this.y = this.targetY;
+            this.moving = false;
+        } else {
+            this.x += dx * this.lerpSpeed;
+            this.y += dy * this.lerpSpeed;
+            this.moving = true;
+        }
     }
 
 dibujar(ctx, camara) {
-       // this.actualizarSuavizado();
+        this.actualizarSuavizado();
 
 
         if(camara.estaMoviendose()){
@@ -28,11 +52,18 @@ dibujar(ctx, camara) {
         const screenY = Math.floor(this.y - camara.y) - this.auxY;
 
 
+        if(!this.moving){
 
+            this.estadoActual = this.estadoActual.replace("WALK","IDLE");
+            
+        }
 
-        if(this.estadoActual.includes("WALK")){ //TO-DO: algun tipo de orden de finalización?
+       
+        
+        if(this.estadoActual.includes("WALK")){
             this.swapAnimator(this.WalkAnimator);
         } else {
+            
             this.swapAnimator(this.IdleAnimator);
         }
 
