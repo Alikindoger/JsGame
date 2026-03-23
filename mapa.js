@@ -82,6 +82,7 @@ export class Mapa {
     ];
 
     for (let llave of esquinas) {
+        
         const obj = this.objetosInteractuables[llave];
             if(obj){ return true; break;}
            
@@ -92,6 +93,7 @@ export class Mapa {
     }
 
     registrarObjeto(col, fila, objeto) {
+        
     const llave = `${col}-${fila}`;
     this.objetosInteractuables[llave] = objeto;
     }
@@ -157,11 +159,5 @@ export class Mapa {
                 }
             }
         }
-
-        for(const object in this.objetosInteractuables){
-            this.objetosInteractuables[object].dibujar(ctx);
-            
-        }
-
 }
 }

@@ -2,12 +2,14 @@
 import { NetworkedPlayer } from "./networkedPlayer.js";
 import { LocalPlayer } from "./localPlayer.js";
 import { Estado, mapa } from "./game.js";
+import { Entidad } from "./entidad.js";
 class Conection {
     constructor() {
         this.url = 'ws://localhost:8080';
         this.socket = null;
         this.eventos = {};
         this.players = {};
+        this.entidades = {};
         this.conectado = false;
         this.nombre = "";
         this.miIDLocal = null;
@@ -58,6 +60,17 @@ class Conection {
         Estado.juegoIniciado = true;
 
         this.miIDLocal = data.id;
+
+    });
+
+    conn.on("ENTITIES", (data)=>{
+        console.log("Generando entidades");
+        
+        data.entidades.forEach(ent => {
+            this.entidades[ent.id] = new Entidad(ent.gridX,ent.gridY,64,64);
+            
+            mapa.registrarObjeto(ent.gridX,ent.gridY,ent.id);
+        });
 
     });
 

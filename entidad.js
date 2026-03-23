@@ -2,11 +2,14 @@ export class Entidad {
     constructor(gridX, gridY, ancho, alto, rutaImagen) {
         this.gridX = gridX;
         this.gridY = gridY;
-        this.tileSize = 32; // Tamaño de tus casillas
+        this.tileSize = 64; 
 
-        // Posición real en el mundo (píxeles)
+        
         this.x = gridX * this.tileSize;
         this.y = gridY * this.tileSize;
+
+        console.log(this.x,this.y);
+        
 
         this.ancho = ancho;
         this.alto = alto;
@@ -29,10 +32,10 @@ export class Entidad {
         const screenY = Math.floor(this.y - camara.y);
 
         if (this.cargada) {
-            ctx.drawImage(this.imagen, screenX, screenY, this.ancho, this.alto);
+            ctx.drawImage(this.imagen, this.gridX * this.tileSize, this.gridY *this.tileSize, this.ancho, this.alto);
         } else {
             ctx.fillStyle = 'gray';
-            ctx.fillRect(screenX, screenY, this.ancho, this.alto);
+            ctx.fillRect(this.gridX * this.tileSize,  this.gridY *this.tileSize, this.ancho, this.alto);
         }
     }
 }

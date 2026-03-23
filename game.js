@@ -5,6 +5,8 @@ import { Camera } from './camara.js';
 import { Interfaz } from './interfaz.js';
 import { LocalPlayer } from './localPlayer.js';
 import { NetworkedPlayer } from './networkedPlayer.js';
+import {  Panel, Boton, Icon } from './UI/Elements.js';
+import { UIManager } from './UI/UIManager.js';
 
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
@@ -16,7 +18,7 @@ export const Estado = {
     jugador : null
 }
 Estado.juegoIniciado = false;
-Estado.pantalla = document.getElementById('pantalla-carga');
+Estado.pantalla = document.getElementById('layout-principal');
 Estado.textoCarga = document.getElementById('mensaje-carga');
 
 
@@ -43,6 +45,19 @@ const btnSignIn = document.getElementById('btn-registrar');
 const inputRegUser = document.getElementById('reg-usuario');
 const inputRegEmail = document.getElementById('reg-email');
 const inputRegPass = document.getElementById('reg-pass');
+
+//Interface
+const ui = new UIManager();
+const menuPausa = new Panel(1600, 700, 100, 100,'rgba(185, 56, 56, 0.7)','./assets/ui.png', () => {
+    console.log("Cerrando...");
+    location.reload(); 
+});
+const icon = new Icon(1625,728,80,80,0,16,'./assets/ui1.png');
+
+
+ui.addElement(menuPausa);
+ui.addElement(icon);
+
 
 
 // --- ESTADO DEL JUEGO ---
@@ -145,9 +160,13 @@ function buclePrincipal(tiempoActual) {
 
         
     }
+        
+    for(const ent of Object.values(conn.entidades)){
+        
+        ent.dibujar(ctx,camara);
+    }
     ctx.restore();
-
-    interfaz.dibujar(ctx, camara, Estado.jugador);
+    ui.dibujar(ctx);
 
     requestAnimationFrame(buclePrincipal);
 }
