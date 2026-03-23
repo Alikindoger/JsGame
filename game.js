@@ -105,8 +105,8 @@ btnConectar.onclick = async () => {
 const camara = new Camera(
     canvas.width, 
     canvas.height, 
-    mapa.datos[0].length * TILE_SIZE, 
-    mapa.datos.length * TILE_SIZE
+    mapa.layer0[0].length * TILE_SIZE, 
+    mapa.layer0.length * TILE_SIZE
 );
 
 
