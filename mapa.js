@@ -1,4 +1,3 @@
-import { Cofre } from "./cofre.js";
 
 export class Mapa {
     constructor(tile_size,cutSize,debug = false) {
@@ -120,12 +119,16 @@ export class Mapa {
         const inf = Math.floor((y + alto - 1) / this.tileSize);
         
 
-            const bloquesAColisionar = [1,2];
+            const bloquesAColisionar = [1,2,181,183];
         const colisionTile = 
             bloquesAColisionar.includes(this.layer0[sup][izq]) ||
             bloquesAColisionar.includes(this.layer0[sup][der]) ||
             bloquesAColisionar.includes(this.layer0[inf][izq]) ||
-            bloquesAColisionar.includes(this.layer0[inf][der]);
+            bloquesAColisionar.includes(this.layer0[inf][der]) ||
+            bloquesAColisionar.includes(this.layer1[sup][izq]) ||
+            bloquesAColisionar.includes(this.layer1[sup][der]) ||
+            bloquesAColisionar.includes(this.layer1[inf][izq]) ||
+            bloquesAColisionar.includes(this.layer1[inf][der]);
 
         if (colisionTile) return true;
 
@@ -139,7 +142,7 @@ export class Mapa {
     for (let llave of esquinas) {
         
         const obj = this.objetosInteractuables[llave];
-            if(obj){ return true; break;}
+            if(obj){ return true;}
            
     }
 
@@ -152,6 +155,7 @@ export class Mapa {
     const llave = `${col}-${fila}`;
     this.objetosInteractuables[llave] = objeto;
     }
+
 
     obtenerObjetoEnPixeles(x, y) {
     const col = Math.floor(x / this.tileSize);

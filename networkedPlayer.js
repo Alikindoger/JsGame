@@ -23,7 +23,7 @@ export class NetworkedPlayer extends Jugador {
     }
 
     actualizarSuavizado() {
-        // Calculamos la distancia al objetivo
+
         const dx = this.targetX - this.x;
         const dy = this.targetY - this.y;
 

@@ -3,6 +3,7 @@ import { NetworkedPlayer } from "./networkedPlayer.js";
 import { LocalPlayer } from "./localPlayer.js";
 import { Estado, mapa } from "./game.js";
 import { Entidad } from "./entidad.js";
+import { crearEntidad } from "./entities/factoriaEntidades.js";
 class Conection {
     constructor() {
         this.url = 'ws://localhost:8080';
@@ -63,15 +64,24 @@ class Conection {
 
     });
 
-    conn.on("ENTITIES", (data)=>{
+    conn.on("ENTITIES_START", (data)=>{
         console.log("Generando entidades");
         
         data.entidades.forEach(ent => {
-            this.entidades[ent.id] = new Entidad(ent.gridX,ent.gridY,64,64);
-            
-            mapa.registrarObjeto(ent.gridX,ent.gridY,ent.id);
+            //this.entidades[ent.id] = new Entidad(ent.gridX,ent.gridY,64,64);
+            this.entidades[ent.id] = crearEntidad(ent);
+            //mapa.registrarObjeto(ent.gridX,ent.gridY,ent.id);
         });
     });
+
+    conn.on("ENTITY_UPDATE", (data)=>{
+
+        const ent = this.entidades[data.id];
+
+        ent.moverDesdeRed(data.gridX,data.gridY);
+
+    });
+
 
     conn.on("LOGIN_FALLO", (data) => {
         errorLogin.innerText = data.mensaje;

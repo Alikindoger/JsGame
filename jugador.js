@@ -16,7 +16,6 @@ export class Jugador extends Entidad {
         this.hitBoxX = 62;
         this.hitBoxY = 62;
 
-        //WIP global porque ambos, networked y local lo usaran
         this.estadoActual = "IDLE_ABAJO";
         this.ultimaDireccion = "ABAJO";
 

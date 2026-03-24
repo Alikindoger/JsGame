@@ -4,13 +4,20 @@ export class Entidad {
         this.gridY = gridY;
         this.tileSize = 64; 
 
-        
-        this.x = gridX * this.tileSize;
-        this.y = gridY * this.tileSize;
 
-        console.log(this.x,this.y);
+        
+        this.x = this.gridX * this.tileSize;
+        this.y = this.gridY * this.tileSize;
         
 
+        this.targetX = this.x;
+        this.targetY = this.y;
+
+        this.lerpSpeed = 0.15; 
+        this.moving = false;
+
+        this.direccion = "ABAJO";
+        
         this.ancho = ancho;
         this.alto = alto;
         
@@ -21,16 +28,39 @@ export class Entidad {
     }
 
     actualizarSuavizado() {
-        const destinoX = this.gridX * this.tileSize;
-        const destinoY = this.gridY * this.tileSize;
-        this.x += (destinoX - this.x) * 0.2;
-        this.y += (destinoY - this.y) * 0.2;
+
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+
+        if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+            this.x = this.targetX;
+            this.y = this.targetY;
+            this.moving = false;
+        } else {
+
+        if (Math.abs(dx) > Math.abs(dy) +0.1) {
+            this.direccion = dx > 0 ? "DERECHA" : "IZQUIERDA";
+        } else {
+            this.direccion = dy > 0 ? "ABAJO" : "ARRIBA";
+        }
+
+            this.x += dx * this.lerpSpeed;
+            this.y += dy * this.lerpSpeed;
+            this.moving = true;
+        }
     }
 
-    dibujar(ctx, camara) {
-        const screenX = Math.floor(this.x - camara.x);
-        const screenY = Math.floor(this.y - camara.y);
+    moverDesdeRed(targetX,targetY){
+        this.targetX = targetX * this.tileSize;
+        this.targetY = targetY * this.tileSize;
+    }
 
+    
+
+    dibujar(ctx, camara) {
+
+        
+    actualizarSuavizado();
         if (this.cargada) {
             ctx.drawImage(this.imagen, this.gridX * this.tileSize, this.gridY *this.tileSize, this.ancho, this.alto);
         } else {
