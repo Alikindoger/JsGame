@@ -68,18 +68,26 @@ class Conection {
         console.log("Generando entidades");
         
         data.entidades.forEach(ent => {
-            //this.entidades[ent.id] = new Entidad(ent.gridX,ent.gridY,64,64);
+
             this.entidades[ent.id] = crearEntidad(ent);
-            //mapa.registrarObjeto(ent.gridX,ent.gridY,ent.id);
+            Estado.listaEntidades[`${ent.gridX},${ent.gridY}`] = this.entidades[ent.id];
+
         });
     });
 
     conn.on("ENTITY_UPDATE", (data)=>{
 
         const ent = this.entidades[data.id];
-
-        ent.moverDesdeRed(data.gridX,data.gridY);
-
+        
+        const clave = ent.moverDesdeRed(data.gridX,data.gridY); //DEVUELVE LA CLAVE ANTERIOR
+        
+        if(clave != null){
+            if ( Estado.listaEntidades[clave] === ent) {
+                delete Estado.listaEntidades[clave];
+                Estado.listaEntidades[`${data.gridX},${data.gridY}`] = this.entidades[data.id];
+            }
+        }
+        
         if(data.COMBAT){
             
             ent.readCombatData(data.COMBAT);

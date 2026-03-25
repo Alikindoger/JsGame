@@ -50,9 +50,17 @@ export class Entidad {
         }
     }
 
-    moverDesdeRed(targetX,targetY){
+    moverDesdeRed(targetX,targetY){ //DEVUELVE LA CLAVE ANTERIOR
+        let clave = null;
+        if(this.targetX != targetX || this.targetY != targetY){
+            clave = `${this.gridX},${this.gridY}`;
+        }
+        this.gridX = targetX;
+        this.gridY = targetY;
         this.targetX = targetX * this.tileSize;
         this.targetY = targetY * this.tileSize;
+
+        return clave;
     }
 
     

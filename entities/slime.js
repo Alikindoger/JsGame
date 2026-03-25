@@ -95,6 +95,6 @@ export class Slime  extends Entidad{
     const porcentaje = this.hp / this.maxHp;
     ctx.fillStyle = porcentaje > 0.3 ? "#2ecc71" : "#e74c3c";
     ctx.fillRect(x, y, anchoBarra * porcentaje, altoBarra);
-}
+    }
 
 }

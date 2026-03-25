@@ -1,5 +1,6 @@
 import { Jugador } from './jugador.js';
 import { conn } from './conection.js';
+import { Estado, mapa } from "./game.js";
 
 export class LocalPlayer extends Jugador {
 
@@ -15,7 +16,6 @@ actualizar(teclas, canvas) {
         let movY = 0;
         let movX = 0;
 
-        // 1. Captura de movimiento
         if (teclas['w']) { movY -= this.velocidad; nuevaDir = 'ARRIBA'; moviendose = true; }
         else if (teclas['s']) { movY += this.velocidad; nuevaDir = 'ABAJO'; moviendose = true; }
         
@@ -24,11 +24,11 @@ actualizar(teclas, canvas) {
 
         
         if (this.input.justPressed['e']) {
-            this.interact();            
+            this.interact();          
+              
             this.input.justPressed['e'] = false;
         }
 
-        // 3. Colisiones (Usando píxeles)
         if (!this.mapa.esSolido(this.x + movX, this.y, this.hitBoxX, this.hitBoxY)) {
             this.x += movX;
         }
@@ -64,7 +64,6 @@ actualizar(teclas, canvas) {
         
         this.objetoEnfocado = this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY);
 
-        // 5. Animaciones
         if (moviendose) {
             this.estadoActual = 'WALK_' + nuevaDir;
             this.ultimaDireccion = nuevaDir;
@@ -75,6 +74,12 @@ actualizar(teclas, canvas) {
         }
      
    
+    }
+
+    getEntity(checkX,checkY){
+        let clave = `${checkX},${checkY}`;        
+
+        return Estado.listaEntidades[clave];
     }
 
     interact(){
@@ -97,9 +102,13 @@ actualizar(teclas, canvas) {
             checkX = this.x - 10;
             checkY = this.y + 32;
         }
-        console.log(checkX,checkY);
+
+        checkX = Math.floor(checkX / 64);
+        checkY = Math.floor(checkY / 64);
+
+        this.getEntity(checkX,checkY); //TODO mandar interacción solo con id 
         
-        let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY))
+        let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY));
         if(objeto != null && objeto.canInteract) objeto.interact();
 
     }

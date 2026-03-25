@@ -1,10 +1,7 @@
 import { conn } from './conection.js';
 import { Mapa } from './mapa.js';
-import { Jugador } from './jugador.js';
 import { Camera } from './camara.js';
 import { Interfaz } from './interfaz.js';
-import { LocalPlayer } from './localPlayer.js';
-import { NetworkedPlayer } from './networkedPlayer.js';
 import {  Panel, Boton, Icon } from './UI/Elements.js';
 import { UIManager } from './UI/UIManager.js';
 
@@ -15,7 +12,8 @@ export const Estado = {
     juegoIniciado: false,
     pantalla: null,
     textoCarga: null,
-    jugador : null
+    jugador : null,
+    listaEntidades : {}
 }
 Estado.juegoIniciado = false;
 Estado.pantalla = document.getElementById('layout-principal');
