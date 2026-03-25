@@ -1,14 +1,15 @@
 export class Entidad {
-    constructor(gridX, gridY, ancho, alto, rutaImagen) {
+    constructor(gridX, gridY, ancho, alto, rutaImagen,id) {
         this.gridX = gridX;
         this.gridY = gridY;
         this.tileSize = 64; 
 
-
+        this.tags = new Set();
         
         this.x = this.gridX * this.tileSize;
         this.y = this.gridY * this.tileSize;
         
+        this.id = id;
 
         this.targetX = this.x;
         this.targetY = this.y;

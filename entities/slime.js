@@ -2,10 +2,12 @@ import { Entidad } from "../entidad.js";
 import {Animador} from "../animador.js";
 
 
-export class Slime  extends Entidad{
+export class Slime extends Entidad{
     
-    constructor(gridX,gridY,ancho,alto){
-        super(gridX,gridY,ancho,alto,null);
+    constructor(gridX,gridY,ancho,alto,id){
+        super(gridX,gridY,ancho,alto,null,id);
+
+        this.tags.add("damagable");
 
         this.estadoActual = "IDLE_ABAJO";
         this.ultimaDireccion = "ABAJO";

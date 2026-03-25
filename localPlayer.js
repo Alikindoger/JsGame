@@ -7,6 +7,9 @@ export class LocalPlayer extends Jugador {
     constructor(gridX, gridY, nombre, mapa) {
         super(gridX,gridY,nombre,mapa)
 
+        this.checkX = 0;
+        this.checkY = 0;
+
     }
 
 actualizar(teclas, canvas) {
@@ -76,6 +79,10 @@ actualizar(teclas, canvas) {
    
     }
 
+    getFocus(){
+        return `${this.checkX},${this.checkY}`;
+    }
+
     getEntity(checkX,checkY){
         let clave = `${checkX},${checkY}`;        
 
@@ -83,34 +90,46 @@ actualizar(teclas, canvas) {
     }
 
     interact(){
-         let checkX = 0;
-         let checkY = 0;
+
 
         if(this.estadoActual.includes("ABAJO")){
-            checkX = this.x + 32;
-            checkY = this.y + 64;
+            this.checkX = this.x + 32;
+            this.checkY = this.y + 64;
         }
         else if(this.estadoActual.includes("ARRIBA")){
-            checkX = this.x + 32;
-            checkY = this.y - 10;
+            this.checkX = this.x + 32;
+            this.checkY = this.y - 10;
         }
         else if(this.estadoActual.includes("DERECHA")){
-            checkX = this.x + 64;
-            checkY = this.y + 32;
+            this.checkX = this.x + 64;
+            this.checkY = this.y + 32;
         }
         else if(this.estadoActual.includes("IZQUIERDA")){
-            checkX = this.x - 10;
-            checkY = this.y + 32;
+            this.checkX = this.x - 10;
+            this.checkY = this.y + 32;
         }
 
-        checkX = Math.floor(checkX / 64);
-        checkY = Math.floor(checkY / 64);
+        this.checkX = Math.floor(this.checkX / 64);
+        this.checkY = Math.floor(this.checkY / 64);
 
-        this.getEntity(checkX,checkY); //TODO mandar interacción solo con id 
+        let ent = this.getEntity(this.checkX,this.checkY);
         
-        let objeto = (this.mapa.obtenerObjetoEnPixeles(checkX,checkY));
+
+        if(ent != null && ent.tags.has("damagable")){
+            conn.enviar("ENTITY_ATTACK",{
+                id : ent.id
+            });
+        }
+        
+        let objeto = (this.mapa.obtenerObjetoEnPixeles(this.checkX,this.checkY)); //esto no funciona checkX y checkY son ahora rows
         if(objeto != null && objeto.canInteract) objeto.interact();
 
+    }
+
+    dibujar(ctx,camara){
+        super.dibujar(ctx,camara);
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(this.checkX * 64, this.checkY * 64, 64, 64);
     }
 
 }

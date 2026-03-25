@@ -81,6 +81,7 @@ export class Jugador extends Entidad {
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.fillText(this.nombre, screenX + this.ancho/2 - 4, screenY - 5);
+        
     }
 
     
