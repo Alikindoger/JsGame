@@ -80,6 +80,11 @@ class Conection {
 
         ent.moverDesdeRed(data.gridX,data.gridY);
 
+        if(data.COMBAT){
+            
+            ent.readCombatData(data.COMBAT);
+        }
+
     });
 
 

@@ -26,6 +26,9 @@ export class Slime  extends Entidad{
                             'WALK_IZQUIERDA': {fila:2, frames: 8, velocidad: 4.5},
                             'WALK_DERECHA': {fila:3, frames: 8, velocidad: 4.5}
                         };
+
+        this.hp = 50;
+        this.maxHp = 50;
     }
     
     swapAnimator(anim){
@@ -52,6 +55,11 @@ export class Slime  extends Entidad{
         
     }
 
+    readCombatData(data) {
+    this.hp = data.hp;
+    this.maxHp = data.maxHp;
+    }
+
     dibujar(ctx, camara) {
         this.actualizarSuavizado();
         this.updateAnimation();
@@ -68,7 +76,25 @@ export class Slime  extends Entidad{
 
         const config = this.animaciones[this.estadoActual];
         this.sprite.actualizar(config.frames, config.velocidad);
-
+        this.dibujarBarraVida(ctx);
     }
+
+    dibujarBarraVida(ctx) {
+    if (this.hp === undefined) return;
+
+    const anchoBarra = 50;
+    const altoBarra = 6;
+    const x = this.x + 40;
+    const y = this.y + 84;
+
+    // BG
+    ctx.fillStyle = "black";
+    ctx.fillRect(x, y, anchoBarra, altoBarra);
+
+    // FILL
+    const porcentaje = this.hp / this.maxHp;
+    ctx.fillStyle = porcentaje > 0.3 ? "#2ecc71" : "#e74c3c";
+    ctx.fillRect(x, y, anchoBarra * porcentaje, altoBarra);
+}
 
 }
