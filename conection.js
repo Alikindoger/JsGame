@@ -95,6 +95,17 @@ class Conection {
 
     });
 
+    conn.on("ENTITY_DESTROY",(data)=>{
+
+        const ent = this.entidades[data.id];
+        if(ent != null){
+            const clave = `${ent.gridX},${ent.gridY}`
+            delete Estado.listaEntidades[clave];
+            delete this.entidades[ent.id];
+        }
+
+    });
+
 
     conn.on("LOGIN_FALLO", (data) => {
         errorLogin.innerText = data.mensaje;

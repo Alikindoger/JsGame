@@ -74,7 +74,7 @@ export class Slime extends Entidad{
 
         const anim = this.animaciones[this.estadoActual];
         
-        this.sprite.dibujar(ctx,this.x,this.y,128,128,anim.fila,0,0,false);
+        this.sprite.dibujar(ctx,this.x - 32,this.y - 32,128,128,anim.fila,0,0,false);
 
         const config = this.animaciones[this.estadoActual];
         this.sprite.actualizar(config.frames, config.velocidad);
@@ -86,8 +86,8 @@ export class Slime extends Entidad{
 
     const anchoBarra = 50;
     const altoBarra = 6;
-    const x = this.x + 40;
-    const y = this.y + 84;
+    const x = this.x ;
+    const y = this.y + 64;
 
     // BG
     ctx.fillStyle = "black";

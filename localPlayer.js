@@ -98,14 +98,14 @@ actualizar(teclas, canvas) {
         }
         else if(this.estadoActual.includes("ARRIBA")){
             this.checkX = this.x + 32;
-            this.checkY = this.y - 10;
+            this.checkY = this.y - 32;
         }
         else if(this.estadoActual.includes("DERECHA")){
             this.checkX = this.x + 64;
             this.checkY = this.y + 32;
         }
         else if(this.estadoActual.includes("IZQUIERDA")){
-            this.checkX = this.x - 10;
+            this.checkX = this.x - 32;
             this.checkY = this.y + 32;
         }
 
