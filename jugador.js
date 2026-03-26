@@ -22,6 +22,7 @@ export class Jugador extends Entidad {
 
                 this.IdleAnimator = new Animador('./assets/idle_player.png',16,16);
                 this.WalkAnimator = new Animador('./assets/walk_player.png',16,16);
+                this.InteractAnimator = new Animador('./assets/interact_player.png',16,16);
         
                 this.sprite = new Animador('./assets/idle_player.png', 16, 16);
                 
@@ -34,7 +35,12 @@ export class Jugador extends Entidad {
                     'WALK_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
                     'WALK_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
                     'WALK_IZQUIERDA': {fila:5, frames: 4, velocidad: 12},
-                    'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12}
+                    'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12},
+
+                    'INTERACT_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
+                    'INTERACT_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
+                    'INTERACT_IZQUIERDA': {fila:3, frames: 4, velocidad: 12},
+                    'INTERACT_DERECHA':{fila:3, frames: 4, velocidad: 12}
         
                 };
 

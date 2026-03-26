@@ -55,7 +55,7 @@ class Conection {
     conn.on("LOGIN_EXITO", (data) => {
         console.log("Login correcto, creando jugador...");
         
-        Estado.jugador = new LocalPlayer(data.x, data.y, data.nombre, mapa);
+        Estado.jugador = new LocalPlayer(Math.round(data.x/64), Math.round(data.y/64), data.nombre, mapa);
         
         document.getElementById('layout-principal').style.display = 'none';
         Estado.juegoIniciado = true;

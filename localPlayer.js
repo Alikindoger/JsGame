@@ -38,6 +38,9 @@ actualizar(teclas, canvas) {
         if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY)) {
             this.y += movY;
         }
+
+        this.gridX = Math.round(this.x/64);
+        this.gridY = Math.round(this.y/64);
         
         if(moviendose){
             conn.enviar("MOVIMIENTO",{
@@ -93,24 +96,22 @@ actualizar(teclas, canvas) {
 
 
         if(this.estadoActual.includes("ABAJO")){
-            this.checkX = this.x + 32;
-            this.checkY = this.y + 64;
+            this.checkX = this.gridX;
+            this.checkY = this.gridY +1;
         }
         else if(this.estadoActual.includes("ARRIBA")){
-            this.checkX = this.x + 32;
-            this.checkY = this.y - 32;
+            this.checkX = this.gridX;
+            this.checkY = this.gridY -1;
         }
         else if(this.estadoActual.includes("DERECHA")){
-            this.checkX = this.x + 64;
-            this.checkY = this.y + 32;
+            this.checkX = this.gridX + 1;
+            this.checkY = this.gridY;
         }
         else if(this.estadoActual.includes("IZQUIERDA")){
-            this.checkX = this.x - 32;
-            this.checkY = this.y + 32;
+            this.checkX = this.gridX - 1;
+            this.checkY = this.gridY;
         }
-
-        this.checkX = Math.floor(this.checkX / 64);
-        this.checkY = Math.floor(this.checkY / 64);
+        
 
         let ent = this.getEntity(this.checkX,this.checkY);
         

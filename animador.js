@@ -11,6 +11,11 @@ export class Animador {
 
         this.frameActual = 0;
         this.contadorTicks = 0;
+
+
+        this.isBlocked = false;
+
+        this.noExitAnims = [];
     }
 
     actualizar(totalFrames, ticksPorFrame) {
