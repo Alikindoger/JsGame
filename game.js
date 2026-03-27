@@ -139,7 +139,7 @@ function buclePrincipal(tiempoActual) {
 
     while (acumulador >= TICK_TIME) {
         
-        Estado.jugador.actualizar(teclas, canvas);
+       
         camara.centrarEn(Estado.jugador.x, Estado.jugador.y, Estado.jugador.ancho, Estado.jugador.alto);
         acumulador -= TICK_TIME;
     }
@@ -148,14 +148,16 @@ function buclePrincipal(tiempoActual) {
 
     ctx.save();
     ctx.translate(-Math.floor(camara.x), -Math.floor(camara.y));
-    
+
+    Estado.jugador.actualizar(teclas, canvas,frameTime);
     mapa.dibujar(ctx);
     Estado.jugador.dibujar(ctx,camara);
     
     for(const player of Object.values(conn.players)){
 
+        player.actualizar(teclas,canvas,frameTime);
         player.dibujar(ctx,camara);
-
+        
         
     }
         

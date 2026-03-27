@@ -1,5 +1,5 @@
 import { Entidad } from './entidad.js';
-import { Animador } from './animador.js';
+import { MasterAnimador } from './masterAnimator.js';
 
 export class Jugador extends Entidad {
     constructor(gridX, gridY, nombre, mapa) {
@@ -19,30 +19,32 @@ export class Jugador extends Entidad {
         this.estadoActual = "IDLE_ABAJO";
         this.ultimaDireccion = "ABAJO";
 
-
-                this.IdleAnimator = new Animador('./assets/idle_player.png',16,16);
-                this.WalkAnimator = new Animador('./assets/walk_player.png',16,16);
-                this.InteractAnimator = new Animador('./assets/interact_player.png',16,16);
-        
-                this.sprite = new Animador('./assets/idle_player.png', 16, 16);
                 
                 this.animaciones = {
-                    'IDLE_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
-                    'IDLE_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
-                    'IDLE_IZQUIERDA': {fila:5, frames: 4, velocidad: 12},
-                    'IDLE_DERECHA':{fila:2, frames: 4, velocidad: 12},
+                    'IDLE_ABAJO':   { fila: 0, frames: 4, velocidad: 12, sprite: "IDLE" },
+                    'IDLE_ARRIBA':  { fila: 4, frames: 4, velocidad: 12, sprite: "IDLE" },
+                    'IDLE_IZQUIERDA': {fila:5, frames: 4, velocidad: 12, sprite: "IDLE"},
+                    'IDLE_DERECHA':{fila:2, frames: 4, velocidad: 12, sprite: "IDLE"},
         
-                    'WALK_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
-                    'WALK_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
-                    'WALK_IZQUIERDA': {fila:5, frames: 4, velocidad: 12},
-                    'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12},
+                    'WALK_ABAJO':   { fila: 0, frames: 4, velocidad: 12, sprite: "WALK" },
+                    'WALK_ARRIBA':  { fila: 4, frames: 4, velocidad: 12, sprite: "WALK" },
+                    'WALK_IZQUIERDA': {fila:5, frames: 4, velocidad: 12, sprite: "WALK"},
+                    'WALK_DERECHA':{fila:2, frames: 4, velocidad: 12, sprite: "WALK"},
 
-                    'INTERACT_ABAJO':   { fila: 0, frames: 4, velocidad: 12 },
-                    'INTERACT_ARRIBA':  { fila: 4, frames: 4, velocidad: 12 },
-                    'INTERACT_IZQUIERDA': {fila:3, frames: 4, velocidad: 12},
-                    'INTERACT_DERECHA':{fila:3, frames: 4, velocidad: 12}
+                    'INTERACT_ABAJO':   { fila: 0, frames: 4, velocidad: 12, sprite: "INTERACT"},
+                    'INTERACT_ARRIBA':  { fila: 4, frames: 4, velocidad: 12, sprite: "INTERACT" },
+                    'INTERACT_IZQUIERDA': {fila:3, frames: 4, velocidad: 12, sprite: "INTERACT"},
+                    'INTERACT_DERECHA':{fila:3, frames: 4, velocidad: 12, sprite: "INTERACT"}
         
                 };
+
+                this.spriteLibrary = {
+                    'IDLE': './assets/idle_player.png',
+                    'WALK': './assets/walk_player.png',
+                    'INTERACT': './assets/interact_player.png'
+                };
+
+                this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,16,16);
 
                     this.input = {
             pressed: {},  // Teclas que están bajadas actualmente
@@ -64,6 +66,11 @@ export class Jugador extends Entidad {
 });
     }
 
+    actualizar(teclas,canvas,deltaTime){
+        this.masterAnim.actualizar(deltaTime);
+
+    }
+
 
     dibujar(ctx, camara) {
        // this.actualizarSuavizado();
@@ -77,25 +84,14 @@ export class Jugador extends Entidad {
         const screenX = Math.floor(this.x - camara.x) - this.auxX;
         const screenY = Math.floor(this.y - camara.y) - this.auxY;
 
-        const anim = this.animaciones[this.estadoActual];
         
 
-        this.sprite.dibujar(ctx, screenX - 13, screenY, this.ancho, this.alto, anim.fila, 2, 4, true);
-        const config = this.animaciones[this.estadoActual];
-        this.sprite.actualizar(config.frames, config.velocidad);
-
+        this.masterAnim.dibujar(ctx,screenX -13,screenY);
+        
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.fillText(this.nombre, screenX + this.ancho/2 - 4, screenY - 5);
         
     }
 
-    
-
-    swapAnimator(anim){
-        if(anim != this.sprite){
-            this.sprite = anim;
-            this.sprite.frameActual = 0;
-        }
-    }
 }

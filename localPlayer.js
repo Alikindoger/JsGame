@@ -12,7 +12,8 @@ export class LocalPlayer extends Jugador {
 
     }
 
-actualizar(teclas, canvas) {
+actualizar(teclas, canvas,deltaTime) {
+        super.actualizar(teclas,canvas,deltaTime);
         let moviendose = false;
         let nuevaDir = this.ultimaDireccion;
 
@@ -70,16 +71,17 @@ actualizar(teclas, canvas) {
         
         this.objetoEnfocado = this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY);
 
+        //this.masterAnim.actualizar(deltaTime);
+
         if (moviendose) {
             this.estadoActual = 'WALK_' + nuevaDir;
             this.ultimaDireccion = nuevaDir;
-            this.swapAnimator(this.WalkAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual,175);
         } else {
             this.estadoActual = 'IDLE_' + this.ultimaDireccion;
-            this.swapAnimator(this.IdleAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual);
         }
-     
-   
+  
     }
 
     getFocus(){
@@ -115,6 +117,7 @@ actualizar(teclas, canvas) {
 
         let ent = this.getEntity(this.checkX,this.checkY);
         
+        this.masterAnim.solicitarCambio("INTERACT_"+this.ultimaDireccion,50);
 
         if(ent != null && ent.tags.has("damagable")){
             conn.enviar("ENTITY_ATTACK",{

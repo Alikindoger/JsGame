@@ -39,6 +39,7 @@ export class NetworkedPlayer extends Jugador {
     }
 
 dibujar(ctx, camara) {
+        super.dibujar(ctx,camara);
         this.actualizarSuavizado();
 
 
@@ -61,18 +62,18 @@ dibujar(ctx, camara) {
        
         
         if(this.estadoActual.includes("WALK")){
-            this.swapAnimator(this.WalkAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual);
         } else {
             
-            this.swapAnimator(this.IdleAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual);
         }
 
         const anim = this.animaciones[this.estadoActual];
         
-
-        this.sprite.dibujar(ctx, screenX - 13, screenY, this.ancho, this.alto, anim.fila, 2, 4, true);
-        const config = this.animaciones[this.estadoActual];
-        this.sprite.actualizar(config.frames, config.velocidad);
+        this.masterAnim.solicitarCambio(this.estadoActual);
+        //this.sprite.dibujar(ctx, screenX - 13, screenY, this.ancho, this.alto, anim.fila, 2, 4, true);
+        //const config = this.animaciones[this.estadoActual];
+        //this.sprite.actualizar(config.frames, config.velocidad);
 
         this.lastX = this.x;
         this.lastY = this.y;

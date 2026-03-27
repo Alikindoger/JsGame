@@ -1,6 +1,5 @@
 import { Entidad } from "../entidad.js";
-import {Animador} from "../animador.js";
-
+import {MasterAnimador} from "../masterAnimator.js";
 
 export class Slime extends Entidad{
     
@@ -12,33 +11,30 @@ export class Slime extends Entidad{
         this.estadoActual = "IDLE_ABAJO";
         this.ultimaDireccion = "ABAJO";
 
-        this.IdleAnimator = new Animador('./assets/gslime_idle.png',64,64);
-        this.WalkAnimator = new Animador('./assets/gslime_run.png',64,64);
+
+         this.animaciones = {
+                            'IDLE_ABAJO':   { fila: 0, frames: 6, velocidad: 16, sprite: "IDLE" },
+                            'IDLE_ARRIBA':  { fila: 1, frames: 6, velocidad: 16, sprite: "IDLE" },
+                            'IDLE_IZQUIERDA': {fila:2, frames: 6, velocidad: 16, sprite: "IDLE"},
+                            'IDLE_DERECHA':{fila:3, frames: 6, velocidad: 16, sprite: "IDLE"},
                 
-        this.sprite = this.IdleAnimator;
-                        
-                        this.animaciones = {
-                            'IDLE_ABAJO':   { fila: 0, frames: 6, velocidad: 16 },
-                            'IDLE_ARRIBA':  { fila: 1, frames: 6, velocidad: 16 },
-                            'IDLE_IZQUIERDA': {fila:2, frames: 6, velocidad: 16},
-                            'IDLE_DERECHA':{fila:3, frames: 6, velocidad: 16},
-                
-                            'WALK_ABAJO':   { fila: 0, frames: 8, velocidad: 4.5 },
-                            'WALK_ARRIBA':  { fila: 1, frames: 8, velocidad: 4.5 },
-                            'WALK_IZQUIERDA': {fila:2, frames: 8, velocidad: 4.5},
-                            'WALK_DERECHA': {fila:3, frames: 8, velocidad: 4.5}
+                            'WALK_ABAJO':   { fila: 0, frames: 8, velocidad: 4.5, sprite: "WALK" },
+                            'WALK_ARRIBA':  { fila: 1, frames: 8, velocidad: 4.5, sprite: "WALK" },
+                            'WALK_IZQUIERDA': {fila:2, frames: 8, velocidad: 4.5, sprite: "WALK"},
+                            'WALK_DERECHA': {fila:3, frames: 8, velocidad: 4.5, sprite: "WALK"}
                         };
+
+            this.spriteLibrary = {
+                    'IDLE': './assets/gslime_idle.png',
+                    'WALK': './assets/gslime_run.png'
+                };
+
+        this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,64,64,128,128);
 
         this.hp = 50;
         this.maxHp = 50;
     }
     
-    swapAnimator(anim){
-        if(anim != this.sprite){
-            this.sprite = anim;
-            this.sprite.frameActual = 0;
-        }
-    }
 
     updateAnimation(){
         if(this.moving){
@@ -67,17 +63,12 @@ export class Slime extends Entidad{
         this.updateAnimation();
 
         if(this.estadoActual.includes("WALK")){
-            this.swapAnimator(this.WalkAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual);
         } else {
-            this.swapAnimator(this.IdleAnimator);
+            this.masterAnim.solicitarCambio(this.estadoActual);
         }
 
-        const anim = this.animaciones[this.estadoActual];
-        
-        this.sprite.dibujar(ctx,this.x - 32,this.y - 32,128,128,anim.fila,0,0,false);
-
-        const config = this.animaciones[this.estadoActual];
-        this.sprite.actualizar(config.frames, config.velocidad);
+        this.masterAnim.dibujar(ctx,this.x -32,this.y-16);
         this.dibujarBarraVida(ctx);
     }
 
