@@ -1,6 +1,6 @@
 import { Jugador } from './jugador.js';
 import { conn } from './conection.js';
-import { Estado, mapa } from "./game.js";
+import { Estado, mapa, efectos } from "./game.js";
 
 export class LocalPlayer extends Jugador {
 
@@ -118,6 +118,8 @@ actualizar(teclas, canvas,deltaTime) {
         let ent = this.getEntity(this.checkX,this.checkY);
         
         this.masterAnim.solicitarCambio("INTERACT_"+this.ultimaDireccion,50);
+
+        efectos.crearEfectoCasilla(this.checkX, this.checkY, "#f12d0f");
 
         if(ent != null && ent.tags.has("damagable")){
             conn.enviar("ENTITY_ATTACK",{

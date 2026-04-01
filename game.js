@@ -4,6 +4,7 @@ import { Camera } from './camara.js';
 import { Interfaz } from './interfaz.js';
 import {  Panel, Boton, Icon } from './UI/Elements.js';
 import { UIManager } from './UI/UIManager.js';
+import {ManagerEffect} from "./managerEffect.js";
 
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
@@ -55,7 +56,7 @@ const icon = new Icon(1625,728,80,80,0,16,'./assets/ui1.png');
 
 ui.addElement(menuPausa);
 ui.addElement(icon);
-
+export const efectos = new ManagerEffect(200);
 
 
 // --- ESTADO DEL JUEGO ---
@@ -150,9 +151,12 @@ function buclePrincipal(tiempoActual) {
     ctx.translate(-Math.floor(camara.x), -Math.floor(camara.y));
 
     Estado.jugador.actualizar(teclas, canvas,frameTime);
+    efectos.actualizar(frameTime);
+
     mapa.dibujar(ctx);
     Estado.jugador.dibujar(ctx,camara);
-    
+    efectos.dibujar(ctx);
+    ui.dibujarCursor(ctx,camara);
     for(const player of Object.values(conn.players)){
 
         player.actualizar(teclas,canvas,frameTime);

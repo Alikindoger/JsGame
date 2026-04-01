@@ -1,7 +1,15 @@
+import { CursorManager } from "./cursorManager.js";
+
 export class UIManager{
     constructor(){
         this.elements = [];
-        this.mouse = { x: 0, y: 0 };
+        this.mouse = { x: 0, y: 0 , gx : 0, gy : 0};
+
+        this.image = new Image();
+        this.image.src = "assets/cursor.png";
+
+
+        this.cursorManager = new CursorManager(this.image);
 
         window.addEventListener('mousedown', (e) => {
             this.elements.forEach(el => {
@@ -14,6 +22,10 @@ export class UIManager{
         window.addEventListener('mousemove', (e) => {
             this.mouse.x = e.clientX;
             this.mouse.y = e.clientY;
+
+            
+            this.mouse.gx = Math.floor(this.mouse.x / 64); // TODO: FIX MOVER PANTALLA RATON SE VE MAL
+            this.mouse.gy = Math.floor(this.mouse.y / 64);
         });
     }
 
@@ -26,6 +38,13 @@ export class UIManager{
             el.actualizar(this.mouse.x, this.mouse.y);
             el.dibujar(ctx);
         });
+
+
+    }
+
+    dibujarCursor(ctx,camara){
+            
+        this.cursorManager.dibujar(ctx,this.mouse.gx + Math.floor(camara.x / 64), this.mouse.gy + Math.floor(camara.y / 64));
     }
 
 }
