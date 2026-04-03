@@ -75,6 +75,16 @@ class Conection {
         });
     });
 
+    conn.on("ENTITY_START", (data)=>{
+                
+        console.log(data);
+        
+                
+        this.entidades[data.id] = crearEntidad(data);
+        Estado.listaEntidades[`${data.gridX},${data.gridY}`] = this.entidades[data.id]; 
+        
+       });
+
     conn.on("ENTITY_UPDATE", (data)=>{
 
         const ent = this.entidades[data.id];

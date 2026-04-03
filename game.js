@@ -5,6 +5,8 @@ import { Interfaz } from './interfaz.js';
 import {  Panel, Boton, Icon } from './UI/Elements.js';
 import { UIManager } from './UI/UIManager.js';
 import {ManagerEffect} from "./managerEffect.js";
+import { BuildManager } from './placementManager.js';
+import { InputManager } from './InputManager.js';
 
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
@@ -52,6 +54,11 @@ const menuPausa = new Panel(1600, 700, 100, 100,'rgba(185, 56, 56, 0.7)','./asse
     location.reload(); 
 });
 const icon = new Icon(1625,728,80,80,0,16,'./assets/ui1.png');
+
+const buildManager = new BuildManager(canvas, { cursor: "" });
+
+
+
 
 
 ui.addElement(menuPausa);
@@ -109,13 +116,19 @@ const camara = new Camera(
 );
 
 
-const teclas = {};
+canvas.addEventListener('click', () => {
+    if (buildManager.activo && buildManager.estaCasillaLibre(Estado.listaEntidades)) {
+        const data = {
+            entity: "SLIME",
+            gridX : buildManager.mouse.gx,
+            gridY: buildManager.mouse.gy
+        };
+        conn.enviar("PLACE_ENTITY",data);
+    }
+});
 
 
-
-// --- INPUTS ---
-window.onkeydown = (e) => teclas[e.key] = true;
-window.onkeyup = (e) => teclas[e.key] = false;
+const teclas = new InputManager(canvas);
 
 
 // --- BUCLE ---
@@ -150,13 +163,15 @@ function buclePrincipal(tiempoActual) {
     ctx.save();
     ctx.translate(-Math.floor(camara.x), -Math.floor(camara.y));
 
-    Estado.jugador.actualizar(teclas, canvas,frameTime);
+    Estado.jugador.actualizar(teclas.estaActiva(), canvas,frameTime);
     efectos.actualizar(frameTime);
 
     mapa.dibujar(ctx);
+    
+    buildManager.dibujar(ctx,Estado.listaEntidades,camara);
     Estado.jugador.dibujar(ctx,camara);
-    efectos.dibujar(ctx);
-    ui.dibujarCursor(ctx,camara);
+
+
     for(const player of Object.values(conn.players)){
 
         player.actualizar(teclas,canvas,frameTime);
@@ -169,6 +184,7 @@ function buclePrincipal(tiempoActual) {
         
         ent.dibujar(ctx,camara);
     }
+    efectos.dibujar(ctx);
     ctx.restore();
     ui.dibujar(ctx);
 

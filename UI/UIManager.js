@@ -8,9 +8,6 @@ export class UIManager{
         this.image = new Image();
         this.image.src = "assets/cursor.png";
 
-
-        this.cursorManager = new CursorManager(this.image);
-
         window.addEventListener('mousedown', (e) => {
             this.elements.forEach(el => {
                 if (el.mouseIn(this.mouse.x, this.mouse.y) && el.onClick) {
@@ -42,9 +39,5 @@ export class UIManager{
 
     }
 
-    dibujarCursor(ctx,camara){
-            
-        this.cursorManager.dibujar(ctx,this.mouse.gx + Math.floor(camara.x / 64), this.mouse.gy + Math.floor(camara.y / 64));
-    }
 
 }

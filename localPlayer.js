@@ -16,15 +16,16 @@ actualizar(teclas, canvas,deltaTime) {
         super.actualizar(teclas,canvas,deltaTime);
         let moviendose = false;
         let nuevaDir = this.ultimaDireccion;
-
+    
+        
         let movY = 0;
         let movX = 0;
 
-        if (teclas['w']) { movY -= this.velocidad; nuevaDir = 'ARRIBA'; moviendose = true; }
-        else if (teclas['s']) { movY += this.velocidad; nuevaDir = 'ABAJO'; moviendose = true; }
+        if (teclas.has('w')) { movY -= this.velocidad; nuevaDir = 'ARRIBA'; moviendose = true; }
+        else if (teclas.has('s')) { movY += this.velocidad; nuevaDir = 'ABAJO'; moviendose = true; }
         
-        if (teclas['a']) { movX -= this.velocidad; nuevaDir = 'IZQUIERDA'; moviendose = true; }
-        else if (teclas['d']) { movX += this.velocidad; nuevaDir = 'DERECHA'; moviendose = true; }
+        if (teclas.has("a")) { movX -= this.velocidad; nuevaDir = 'IZQUIERDA'; moviendose = true; }
+        else if (teclas.has('d')) { movX += this.velocidad; nuevaDir = 'DERECHA'; moviendose = true; }
 
         
         if (this.input.justPressed['e']) {
