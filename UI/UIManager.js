@@ -1,5 +1,3 @@
-import { CursorManager } from "./cursorManager.js";
-
 export class UIManager{
     constructor(){
         this.elements = [];

@@ -27,75 +27,6 @@ actualizar(teclas, canvas,deltaTime) {
         if (teclas.has("a")) { movX -= this.velocidad; nuevaDir = 'IZQUIERDA'; moviendose = true; }
         else if (teclas.has('d')) { movX += this.velocidad; nuevaDir = 'DERECHA'; moviendose = true; }
 
-        
-        if (this.input.justPressed['e']) {
-            this.interact();          
-              
-            this.input.justPressed['e'] = false;
-        }
-
-        if (!this.mapa.esSolido(this.x + movX, this.y, this.hitBoxX, this.hitBoxY)) {
-            this.x += movX;
-        }
-        if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY)) {
-            this.y += movY;
-        }
-
-        this.gridX = Math.round(this.x/64);
-        this.gridY = Math.round(this.y/64);
-        
-        if(moviendose){
-            conn.enviar("MOVIMIENTO",{
-                x : this.x,
-                y : this.y,
-                estadoActual : this.estadoActual
-            });
-        }
-
-
-                let frenteX = this.x + this.ancho / 2;
-        let frenteY = this.y + this.alto / 2;
-        const distanciaCheck = 32;
-
-        if(this.estadoActual.includes("IDLE_ABAJO")){
-            frenteY += 70;
-        }
-        if(this.estadoActual.includes("IDLE_ARRIBA")){
-            frenteY -= 70;
-        }
-        if(this.estadoActual.includes("IDLE_DERECHA")){
-            frenteX += 70;
-        }
-        if(this.estadoActual.includes("IDLE_IZQUIERDA")){
-            frenteX -= 70;
-        }
-        
-        this.objetoEnfocado = this.mapa.obtenerObjetoEnPixeles(frenteX, frenteY);
-
-        //this.masterAnim.actualizar(deltaTime);
-
-        if (moviendose) {
-            this.estadoActual = 'WALK_' + nuevaDir;
-            this.ultimaDireccion = nuevaDir;
-            this.masterAnim.solicitarCambio(this.estadoActual,175);
-        } else {
-            this.estadoActual = 'IDLE_' + this.ultimaDireccion;
-            this.masterAnim.solicitarCambio(this.estadoActual);
-        }
-  
-    }
-
-    getFocus(){
-        return `${this.checkX},${this.checkY}`;
-    }
-
-    getEntity(checkX,checkY){
-        let clave = `${checkX},${checkY}`;        
-
-        return Estado.listaEntidades[clave];
-    }
-
-    interact(){
 
 
         if(this.estadoActual.includes("ABAJO")){
@@ -115,8 +46,90 @@ actualizar(teclas, canvas,deltaTime) {
             this.checkY = this.gridY;
         }
         
+        const entidad =  this.getEntity(this.getFocus());
 
-        let ent = this.getEntity(this.checkX,this.checkY);
+        if (this.input.justPressed['e']) {
+            this.interact();          
+              
+            this.input.justPressed['e'] = false;
+        }       
+
+        if (!this.mapa.esSolido(this.x + movX, this.y, this.hitBoxX, this.hitBoxY) && !(entidad && entidad.tags.has("obstaculo"))) {
+   
+            this.x += movX;
+        }
+        if (!this.mapa.esSolido(this.x, this.y + movY, this.hitBoxX, this.hitBoxY) && !(entidad && entidad.tags.has("obstaculo"))) {
+            this.y += movY;
+        }
+
+        
+
+        this.gridX = Math.round(this.x/64);
+        this.gridY = Math.round(this.y/64);
+        
+        if(moviendose){
+            conn.enviar("MOVIMIENTO",{
+                x : this.x,
+                y : this.y,
+                estadoActual : this.estadoActual
+            });
+        }
+
+        
+        this.objetoEnfocado = this.mapa.obtenerObjeto(this.checkX, this.checkY);
+
+        if (moviendose) {
+            this.estadoActual = 'WALK_' + nuevaDir;
+            this.ultimaDireccion = nuevaDir;
+            this.masterAnim.solicitarCambio(this.estadoActual,175);
+        } else {
+            this.estadoActual = 'IDLE_' + this.ultimaDireccion;
+            this.masterAnim.solicitarCambio(this.estadoActual);
+        }
+  
+    }
+
+    updateCheck(){
+        const localX = this.x % 64;
+        const localY = this.y % 64;
+
+        const margin = 32;
+
+        this.checkX = this.gridX;
+        this.checkY = this.gridY;
+
+        if (this.estadoActual.includes("ABAJO")) {
+        if (localY > (64 - MARGEN)) this.checkY = this.gridY + 1;
+        } 
+        else if (this.estadoActual.includes("ARRIBA")) {
+            if (localY < MARGEN) this.checkY = this.gridY - 1;
+        } 
+        else if (this.estadoActual.includes("DERECHA")) {
+            if (localX > (64 - MARGEN)) this.checkX = this.gridX + 1;
+        } 
+        else if (this.estadoActual.includes("IZQUIERDA")) {
+            if (localX < MARGEN) this.checkX = this.gridX - 1;
+    }
+    }
+
+
+    getFocus(){
+        return `${this.checkX},${this.checkY}`;
+    }
+
+    getEntity_(checkX,checkY){
+        let clave = `${checkX},${checkY}`;        
+
+        return Estado.listaEntidades[clave];
+    }
+
+    getEntity(clave){
+        return Estado.listaEntidades[clave];
+    }
+
+    interact(){        
+
+        let ent = this.getEntity_(this.checkX,this.checkY);        
         
         this.masterAnim.solicitarCambio("INTERACT_"+this.ultimaDireccion,50);
 
@@ -128,7 +141,7 @@ actualizar(teclas, canvas,deltaTime) {
             });
         }
         
-        let objeto = (this.mapa.obtenerObjetoEnPixeles(this.checkX,this.checkY)); //esto no funciona checkX y checkY son ahora rows
+        let objeto = (this.mapa.obtenerObjeto(this.checkX,this.checkY));
         if(objeto != null && objeto.canInteract) objeto.interact();
 
     }
@@ -137,6 +150,7 @@ actualizar(teclas, canvas,deltaTime) {
         super.dibujar(ctx,camara);
         ctx.strokeStyle = "red";
         ctx.strokeRect(this.checkX * 64, this.checkY * 64, 64, 64);
+
     }
 
 }

@@ -1,4 +1,4 @@
-import { Entidad } from './entidad.js';
+import { Entidad } from './entities/entidad.js';
 import { MasterAnimador } from './masterAnimator.js';
 
 export class Jugador extends Entidad {
@@ -44,7 +44,7 @@ export class Jugador extends Entidad {
                     'INTERACT': './assets/interact_player.png'
                 };
 
-                this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,16,16);
+                this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,16,16,64,64,2,4);
 
                     this.input = {
             pressed: {},  // Teclas que están bajadas actualmente

@@ -1,4 +1,4 @@
-import { Entidad } from "../entidad.js";
+import { Entidad } from "./entidad.js";
 import {MasterAnimador} from "../masterAnimator.js";
 
 export class Slime extends Entidad{
@@ -29,7 +29,7 @@ export class Slime extends Entidad{
                     'WALK': './assets/gslime_run.png'
                 };
 
-        this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,64,64,128,128);
+        this.masterAnim = new MasterAnimador(this.spriteLibrary,this.animaciones,64,64,128,128,0,0);
 
         this.hp = 50;
         this.maxHp = 50;
@@ -56,6 +56,10 @@ export class Slime extends Entidad{
     readCombatData(data) {
     this.hp = data.hp;
     this.maxHp = data.maxHp;
+    }
+
+    actualizar(deltaTime){
+        this.masterAnim.actualizar(deltaTime);
     }
 
     dibujar(ctx, camara) {

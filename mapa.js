@@ -62,7 +62,7 @@ export class Mapa {
         
 
         this.tileConfig = {
-            0: { tx: 11, ty: 0 , img: 1}, 
+            0: { tx: 11, ty: 0, img: 1}, 
             78: { tx: 0, ty : 0, img : 1},
             79: {tx:1,ty:0,img:1},
             80: {tx:2,ty:0,img:1},
@@ -157,10 +157,8 @@ export class Mapa {
     }
 
 
-    obtenerObjetoEnPixeles(x, y) {
-    const col = Math.floor(x / this.tileSize);
-    const fila = Math.floor(y / this.tileSize);
-    const llave = `${col}-${fila}`;
+    obtenerObjeto(gridX, gridY) {
+    const llave = `${gridX}-${gridY}`;
     
 
     return this.objetosInteractuables[llave] || null; // Devuelve el objeto o null si está vacío

@@ -9,7 +9,7 @@ export class BuildManager {
         this.activo = true;
         this.setActivo(true);
         this.mouse = { gx: 0, gy: 0 };
-        this.objetoSeleccionado = "COFRE";
+        this.objetoSeleccionado = 0;
 
         this.camOffX = 0;
         this.camOffY = 0;

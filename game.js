@@ -5,9 +5,8 @@ import { Interfaz } from './interfaz.js';
 import {  Panel, Boton, Icon } from './UI/Elements.js';
 import { UIManager } from './UI/UIManager.js';
 import {ManagerEffect} from "./managerEffect.js";
-import { BuildManager } from './placementManager.js';
+import { BuildManager } from './buildManager.js';
 import { InputManager } from './InputManager.js';
-
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -117,11 +116,14 @@ const camara = new Camera(
 
 
 canvas.addEventListener('click', () => {
+    
     if (buildManager.activo && buildManager.estaCasillaLibre(Estado.listaEntidades)) {
+       
         const data = {
-            entity: "SLIME",
+            entity: "FURNIE",
             gridX : buildManager.mouse.gx,
-            gridY: buildManager.mouse.gy
+            gridY: buildManager.mouse.gy,
+            subTipo : buildManager.objetoSeleccionado
         };
         conn.enviar("PLACE_ENTITY",data);
     }
@@ -181,7 +183,7 @@ function buclePrincipal(tiempoActual) {
     }
         
     for(const ent of Object.values(conn.entidades)){
-        
+        ent.actualizar(frameTime);
         ent.dibujar(ctx,camara);
     }
     efectos.dibujar(ctx);

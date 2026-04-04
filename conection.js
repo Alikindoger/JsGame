@@ -2,7 +2,6 @@
 import { NetworkedPlayer } from "./networkedPlayer.js";
 import { LocalPlayer } from "./localPlayer.js";
 import { Estado, mapa } from "./game.js";
-import { Entidad } from "./entidad.js";
 import { crearEntidad } from "./entities/factoriaEntidades.js";
 class Conection {
     constructor() {
@@ -79,7 +78,8 @@ class Conection {
                 
         console.log(data);
         
-                
+        
+        
         this.entidades[data.id] = crearEntidad(data);
         Estado.listaEntidades[`${data.gridX},${data.gridY}`] = this.entidades[data.id]; 
         
@@ -199,9 +199,9 @@ class Conection {
     }
 
     enviar(tipo, datos = {}) {
-        console.log("mando");
         
         if (this.conectado && this.socket.readyState === WebSocket.OPEN) {
+            
             this.socket.send(JSON.stringify({ tipo, ...datos }));
         }
     }

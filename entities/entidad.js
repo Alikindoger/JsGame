@@ -64,7 +64,9 @@ export class Entidad {
         return clave;
     }
 
-    
+    actualizar(deltaTime){
+        
+    }
 
     dibujar(ctx, camara) {
 

@@ -1,5 +1,5 @@
 export class MasterAnimador{
-    constructor(assets, mapAnims, frameW, frameH, finalW = 64,finalH=64) {
+    constructor(assets, mapAnims, frameW, frameH, finalW = 64,finalH=64,offsetX,offsetY) {
         this.assets = assets;
         this.images = {};
         this.mapAnims = mapAnims; // { "IDLE": { row: 0, frames: 4 }, ... }
@@ -8,14 +8,15 @@ export class MasterAnimador{
         this.finalH = finalH;
         this.frameW = frameW;
         this.frameH = frameH;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
 
         this.currentAnim = "IDLE_ABAJO";
         this.currentFrame = 0;
         this.msPerFrame = 100; // 10 FPS por defecto
         this.acumuladoTime = 0;
 
-        // --- NUEVO: SISTEMA DE BLOQUEO ---
-        this.estaBloqueada = false; // Indica si la animación actual DEBE terminar
+        this.estaBloqueada = false; 
         
         // Definimos qué animaciones NO se pueden cortar
         this.animacionesIninterrumpibles = new Set(["INTERACT_ABAJO", "INTERACT_ARRIBA", "INTERACT_DERECHA", "INTERACT_IZQUIERDA"]);
@@ -93,8 +94,8 @@ export class MasterAnimador{
         const nombreSprite = animConfig.sprite;
         const img = this.images[nombreSprite];
 
-        let offsetX = 2;
-        let offsetY = 4;
+        let offsetX = this.offsetX;
+        let offsetY = this.offsetY;
 
         if(this.currentFrame !=0){
                 offsetX = offsetX*2;
