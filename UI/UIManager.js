@@ -30,6 +30,7 @@ export class UIManager{
 
     dibujar(ctx) {
         this.elements.forEach(el => {
+            
             el.actualizar(this.mouse.x, this.mouse.y);
             el.dibujar(ctx);
         });

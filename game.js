@@ -46,22 +46,37 @@ const inputRegUser = document.getElementById('reg-usuario');
 const inputRegEmail = document.getElementById('reg-email');
 const inputRegPass = document.getElementById('reg-pass');
 
-//Interface
-const ui = new UIManager();
-const menuPausa = new Panel(1600, 700, 100, 100,'rgba(185, 56, 56, 0.7)','./assets/ui.png', () => {
-    console.log("Cerrando...");
-    location.reload(); 
-});
-const icon = new Icon(1625,728,80,80,0,16,'./assets/ui1.png');
-
 const buildManager = new BuildManager(canvas, { cursor: "" });
 
 
+//Interface
+const ui = new UIManager();
+const pauseMenu = new Panel(canvas.width - 200 , canvas.height -150, 100, 100,'rgba(185, 56, 56, 0.7)','./assets/ui.png', () => {
+    console.log("Cerrando...");
+    location.reload(); 
+});
+const pauseIcon = new Icon(canvas.width -175,canvas.height -125,80,80,32,32,'./assets/ui1.png');
+
+const buildingMenu = new Panel(canvas.width - 350 , canvas.height -150, 100, 100,'rgba(185, 56, 56, 0.7)','./assets/ui.png', () => {
+    
+    buildManager.setActivo(!buildManager.activo);
+
+});
+const buildingIcon = new Icon(canvas.width -325,canvas.height -125,80,80,32,16,'./assets/ui1.png');
+
+
+ui.addElement(pauseMenu);
+ui.addElement(pauseIcon);
+ui.addElement(buildingMenu);
+ui.addElement(buildingIcon);
 
 
 
-ui.addElement(menuPausa);
-ui.addElement(icon);
+
+
+
+
+
 export const efectos = new ManagerEffect(200);
 
 

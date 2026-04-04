@@ -27,24 +27,8 @@ actualizar(teclas, canvas,deltaTime) {
         if (teclas.has("a")) { movX -= this.velocidad; nuevaDir = 'IZQUIERDA'; moviendose = true; }
         else if (teclas.has('d')) { movX += this.velocidad; nuevaDir = 'DERECHA'; moviendose = true; }
 
-
-
-        if(this.estadoActual.includes("ABAJO")){
-            this.checkX = this.gridX;
-            this.checkY = this.gridY +1;
-        }
-        else if(this.estadoActual.includes("ARRIBA")){
-            this.checkX = this.gridX;
-            this.checkY = this.gridY -1;
-        }
-        else if(this.estadoActual.includes("DERECHA")){
-            this.checkX = this.gridX + 1;
-            this.checkY = this.gridY;
-        }
-        else if(this.estadoActual.includes("IZQUIERDA")){
-            this.checkX = this.gridX - 1;
-            this.checkY = this.gridY;
-        }
+        
+        this.updateCheckers();
         
         const entidad =  this.getEntity(this.getFocus());
 
@@ -89,27 +73,24 @@ actualizar(teclas, canvas,deltaTime) {
   
     }
 
-    updateCheck(){
-        const localX = this.x % 64;
-        const localY = this.y % 64;
-
-        const margin = 32;
-
-        this.checkX = this.gridX;
-        this.checkY = this.gridY;
-
-        if (this.estadoActual.includes("ABAJO")) {
-        if (localY > (64 - MARGEN)) this.checkY = this.gridY + 1;
-        } 
-        else if (this.estadoActual.includes("ARRIBA")) {
-            if (localY < MARGEN) this.checkY = this.gridY - 1;
-        } 
-        else if (this.estadoActual.includes("DERECHA")) {
-            if (localX > (64 - MARGEN)) this.checkX = this.gridX + 1;
-        } 
-        else if (this.estadoActual.includes("IZQUIERDA")) {
-            if (localX < MARGEN) this.checkX = this.gridX - 1;
-    }
+    updateCheckers(){
+        if(this.estadoActual.includes("ABAJO")){
+            this.checkX = this.gridX;
+            this.checkY = Math.floor((this.y + 64 + 1) / 64);
+            
+        }
+        else if(this.estadoActual.includes("ARRIBA")){
+            this.checkX = this.gridX;
+            this.checkY = Math.floor((this.y - 1) / 64);
+        }
+        else if(this.estadoActual.includes("DERECHA")){
+            this.checkX = Math.floor((this.x + 64 - 1) / this.tileSize);
+            this.checkY = this.gridY;
+        }
+        else if(this.estadoActual.includes("IZQUIERDA")){
+            this.checkX = Math.floor((this.x - 1) / this.tileSize);
+            this.checkY = this.gridY;
+        }
     }
 
 
@@ -118,7 +99,7 @@ actualizar(teclas, canvas,deltaTime) {
     }
 
     getEntity_(checkX,checkY){
-        let clave = `${checkX},${checkY}`;        
+        let clave = `${checkX},${checkY}`;
 
         return Estado.listaEntidades[clave];
     }
