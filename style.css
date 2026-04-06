@@ -1,130 +1,213 @@
-body {
+/* --- CONFIGURACIÓN BASE (TUYA) --- */
+body, html {
     margin: 0;
-    overflow: hidden; /* Evita el scroll */
-    background-color: #222; /* Fondo oscuro */
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #222;
+    font-family: 'monospace';
+    /* Suavizado de píxeles global */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
 }
 
 canvas {
-    image-rendering: -moz-critp-edge; /* Firefox */
-    image-rendering: pixelated;       /* Chrome, Edge, Safari */
-    image-rendering: crisp-edges;
-}
-.jersey-10-regular {
-  font-family: "Jersey 10", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-body{
-     image-rendering: -moz-critp-edge;
+    display: block;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
 }
-body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
-        font-family: 'monospace'; /* Mantenemos la estética de juego/Java */
-    }
 
-    .layout-principal {
-        display: flex;
-        width: 100%;
-        height: 100vh;
-    }
+/* --- LAYOUT LOGIN/REGISTRO (TUYO) --- */
+.layout-principal {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    position: absolute; /* Para que esté sobre el canvas al inicio */
+    z-index: 100;
+}
 
-    /* LADO IZQUIERDO: REGISTRO (SIGN UP) */
-    .seccion-registro {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #6d5252; /* Un gris claro para contrastar con el negro */
-        color: #333;
-        padding: 20px;
-        border-right: 2px solid #333;
-    }
+.seccion-registro {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #6d5252;
+    color: #333;
+    padding: 20px;
+    border-right: 2px solid #333;
+}
 
-    /* LADO DERECHO: LOGIN / CARGA */
-    .seccion-login {
-        flex: 1;
-        background: rgba(94, 79, 79, 0.9);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        padding: 20px;
-    }
+.seccion-login {
+    flex: 1;
+    background: rgba(94, 79, 79, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
 
-    /* Estilos comunes para formularios */
-    .contenedor-form {
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-    }
+.contenedor-form {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+}
 
-    h2 {
-        margin-bottom: 20px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
+h2 {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-    input {
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0;
-        border: 1px solid #ccc;
-        box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
-        font-family: 'monospace';
-    }
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'monospace';
+}
 
-    .seccion-login input {
-        background: #222;
-        color: rgb(255, 255, 255); /* Estilo terminal para el lado oscuro */
-        border: 1px solid #444;
-    }
+.seccion-login input {
+    background: #222;
+    color: rgb(255, 255, 255);
+    border: 1px solid #444;
+}
 
-    button {
-        width: 100%;
-        padding: 10px;
-        margin-top: 15px;
-        cursor: pointer;
-        font-family: 'monospace';
-        font-weight: bold;
-        text-transform: uppercase;
-        transition: 0.3s;
-    }
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    font-family: 'monospace';
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
 
-    .btn-registro {
-        background-color: #333;
-        color: white;
-        border: none;
-    }
+.btn-registro {
+    background-color: #333;
+    color: white;
+    border: none;
+}
 
-    .btn-registro:hover {
-        background-color: #555;
-    }
+.btn-registro:hover { background-color: #555; }
 
-    #btn-conectar {
-        background-color: #008cba;
-        color: white;
-        border: none;
-    }
+#btn-conectar {
+    background-color: #008cba;
+    color: white;
+    border: none;
+}
 
-    #btn-conectar:hover {
-        background-color: #005f7a;
-    }
+#btn-conectar:hover { background-color: #005f7a; }
 
-    .spinner {
-        border: 4px solid rgba(255, 255, 255, 0.3);
-        border-top: 4px solid #0f0;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        margin-top: 20px;
-    }
+#ui-build-menu {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 20, 20, 0.95);
+    padding: 15px;
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    display: none;
+    z-index: 50;
+    min-width: 340px;
+}
 
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    color: #f1c40f;
+    font-size: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    gap: 10px;
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.furnie-btn {
+    width: 64px;
+    height: 64px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: 2px solid #444;
+    background-color: #111;
+
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+}
+
+.furnie-btn:hover {
+    border-color: #f1c40f;
+    transform: scale(1.05);
+}
+
+.furnie-btn.selected {
+    border-color: #2ecc71;
+    background-color: #222;
+    box-shadow: inset 0 0 10px #2ecc71;
+}
+
+
+.grid-container::-webkit-scrollbar { width: 8px; }
+.grid-container::-webkit-scrollbar-track { background: #111; }
+.grid-container::-webkit-scrollbar-thumb { background: #f1c40f; }
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #0f0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-top: 20px;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.tabs-container {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #444;
+    padding-bottom: 5px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 5px !important;
+    margin: 0 !important;
+    font-size: 10px;
+    background: #333;
+    color: #bbb;
+    border: 1px solid #555;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #f1c40f;
+    color: #000;
+    border-color: #fff;
+}
+
+.tab-btn:hover:not(.active) {
+    background: #444;
+    color: #fff;
+}

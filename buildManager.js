@@ -6,8 +6,7 @@ export class BuildManager {
         this.cursor = new Image();
         this.cursor.src = "assets/cursor.png";
         
-        this.activo = true;
-        this.setActivo(true);
+        this.activo = false;
         this.mouse = { gx: 0, gy: 0 };
         this.objetoSeleccionado = 0;
 

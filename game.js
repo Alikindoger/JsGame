@@ -7,6 +7,7 @@ import { UIManager } from './UI/UIManager.js';
 import {ManagerEffect} from "./managerEffect.js";
 import { BuildManager } from './buildManager.js';
 import { InputManager } from './InputManager.js';
+import { BuildUIManager } from './UI/buildUIManager.js';
 const canvas = document.getElementById('juegoCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -47,6 +48,7 @@ const inputRegEmail = document.getElementById('reg-email');
 const inputRegPass = document.getElementById('reg-pass');
 
 const buildManager = new BuildManager(canvas, { cursor: "" });
+const buildUIManager = new BuildUIManager(buildManager);
 
 
 //Interface
@@ -58,8 +60,9 @@ const pauseMenu = new Panel(canvas.width - 200 , canvas.height -150, 100, 100,'r
 const pauseIcon = new Icon(canvas.width -175,canvas.height -125,80,80,32,32,'./assets/ui1.png');
 
 const buildingMenu = new Panel(canvas.width - 350 , canvas.height -150, 100, 100,'rgba(185, 56, 56, 0.7)','./assets/ui.png', () => {
-    
+    buildUIManager.toggleMenu(!buildManager.activo);
     buildManager.setActivo(!buildManager.activo);
+
 
 });
 const buildingIcon = new Icon(canvas.width -325,canvas.height -125,80,80,32,16,'./assets/ui1.png');

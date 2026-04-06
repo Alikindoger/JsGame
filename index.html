@@ -39,8 +39,30 @@
         <p id="mensaje-carga">Conectando con el Reino de Java...</p>
     </div>
 
+
+
 </div>
+
+    <div id="game-container" style="position: relative; width: 800px; height: 600px;">
+        
     <canvas id="juegoCanvas"></canvas>
+
+        <div id="ui-build-menu" class="build-menu">
+            <div class="menu-header">
+                <span>Martillo de Construcción</span>
+            </div>
+            <div class="tabs-container">
+        <button class="tab-btn active" data-categoria="TODO">Todos</button>
+        <button class="tab-btn" data-categoria="MADERA">Deco</button>
+        <button class="tab-btn" data-categoria="METAL">Luces</button>
+        <button class="tab-btn" data-categoria="BASE">Base</button>
+        </div>
+            <div id="furnie-list" class="grid-container">
+                </div>
+        </div>
+
+    </div>
+
     <script type="module" src="game.js"></script>
 </body>
 </html>
